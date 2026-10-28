@@ -712,6 +712,7 @@ describe("complete private Partner Brief", () => {
     const b = await f.giver.query(api.briefs.get, { id });
     expect(b.relationship).toBe("Friend");
     expect(b.shortlist).toHaveLength(3);
+    expect(b.shortlist[1].renderVersion).toBeUndefined();
     expect(b.images).toHaveLength(1);
     expect(b.sourceRevision).toBeGreaterThan(0);
     expect(b.images[0].renderRevision).toBe(l.version);

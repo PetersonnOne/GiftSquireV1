@@ -1,5 +1,7 @@
 # GiftSquire PRD
 
+Release status, 28 October 2026: the user approved production deployment. GiftSquire is live at https://giftsquire-v1.vercel.app through GitHub and Vercel, with independent Convex production. Owner setup and hosted core acceptance are complete; see [exact evidence](docs/HOSTED_VERIFICATION.md). This supersedes earlier deployment deferral. Demo production remains separate.
+
 Version 0.3 — updated 28 October 2026: scoped feedback, explicit purchase reports, full Partner Brief snapshots and lipstick comparison presentation. Requirements and implementation evidence are tracked separately.
 
 ## 1. Product and audience

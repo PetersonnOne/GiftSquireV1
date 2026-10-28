@@ -1,5 +1,9 @@
 # GiftSquire judging evidence plan
 
+## Hosted evidence — 28 October 2026
+
+The live app, real production YouCam results, recipient approval, actual-image briefs, delivered Gift Brief and both hosted voice handoffs are now demonstrated. Production owner setup and privacy/access checks passed. See [hosted verification](docs/HOSTED_VERIFICATION.md) for the exact evidence, including Interactive Mode's successful explicit retry after a startup timeout. This supersedes prior deployment-deferral entries. Demo recording has not started.
+
 27 October 2026. Planning record; no proposed feature is promoted to a tested result.
 
 | Intended strength | Planned demonstration | Evidence status |

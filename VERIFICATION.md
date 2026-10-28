@@ -1,5 +1,9 @@
 # GiftSquire verification
 
+## Latest: hosted release accepted — 28 October 2026
+
+GiftSquire is live at https://giftsquire-v1.vercel.app through GitHub main and Vercel, with independent Convex production. Hosted accounts/recovery, actual YouCam outputs, recipient approval/final choice, Partner Brief/PDF, delivered Gift Brief and both voice handoffs passed. Owner verification, superadmin provisioning, private-photo guards and public bundle scan passed. Interactive voice needed one explicit retry; physical listening is not claimed. See [hosted evidence](docs/HOSTED_VERIFICATION.md). This supersedes older deferred-deployment entries below.
+
 ## 27 October 2026: approved scope and configuration inspection
 
 The user selected GiftSquire as the canonical name, requested reuse of the existing application foundation in the YouCam workspace, and approved self-shopping as well as gifting for friends, colleagues and family during events, celebrations and festive seasons. Optional beauty remains lipstick supporting the clothing decision.

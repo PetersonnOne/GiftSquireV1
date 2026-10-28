@@ -205,7 +205,9 @@ export const create = mutation({
               name:
                 PRODUCTS.find((p) => p.id === l.productId)?.name ?? "Outfit",
               version: l.version,
-              renderVersion: l.renderVersion ?? l.version,
+              renderVersion: l.resultId
+                ? (l.renderVersion ?? l.version)
+                : undefined,
               sourceVersion: l.sourceVersion,
               status: l.status,
               shade: l.lipstick,

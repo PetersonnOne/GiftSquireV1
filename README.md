@@ -2,6 +2,8 @@
 
 **Choose with confidence. Give with thought.**
 
+[Open GiftSquire](https://giftsquire-v1.vercel.app)
+
 A clothing gift should feel like *them*. GiftSquire helps thoughtful gift-givers explore real YouCam outfit previews, give the recipient a say, and keep the final choice a surprise. Shopping for yourself is a first-class journey too.
 
 ## A more personal way to choose
@@ -31,7 +33,7 @@ The studio runs at `http://localhost:4327`. `npm run convex:dev` updates the lin
 
 ## Verification
 
-The optimized Next.js build, TypeScript checks and 39 automated tests pass. Chromium checks cover account recovery, mobile themes, shopping/approval, actual-image/PDF exports and reviewed email delivery. Both voice modes completed real GPT Live handoffs in controlled QA on 27 October; fresh audio playback and an Interactive Mode review handoff were also verified on 28 October. [Detailed evidence](VERIFICATION.md) records each run.
+The optimized Next.js build, TypeScript checks and 39 automated tests pass. Production checks on 28 October cover signup/recovery, mobile themes, real YouCam outputs, recipient approval, PDF briefs and delivered Resend email. Both voice modes completed hosted audio playback, review and confirmation checks. [Detailed evidence](docs/HOSTED_VERIFICATION.md) records the hosted results.
 
 ## Explore the project
 
@@ -44,6 +46,6 @@ The optimized Next.js build, TypeScript checks and 39 automated tests pass. Chro
 
 ## What's next
 
-Review the completed local experience, then—with owner approval—configure independent production hosting and complete hosted acceptance. Capture the walkthrough using verified application results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
+Capture the walkthrough and prepare the final submission package using verified hosted results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
 
 Clothing and optional lipstick previews powered by **YouCam · Perfect Corp.**

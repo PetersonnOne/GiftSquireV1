@@ -1,5 +1,7 @@
 # Local PRD completion audit — 28 October 2026
 
+Current release: production deployment is approved, live and hosted-verified at https://giftsquire-v1.vercel.app . Owner setup and both hosted voice handoffs passed; the first Interactive attempt timed out and its explicit retry passed. See [hosted evidence](HOSTED_VERIFICATION.md). This supersedes the deferred-deployment entries below. Demo production remains a separate phase.
+
 This supersedes the earlier pending-feature list. First-release implementation is complete locally; evidence below separates backend tests, actual provider results and browser checks.
 
 | PRD item | Implemented result | Verification |

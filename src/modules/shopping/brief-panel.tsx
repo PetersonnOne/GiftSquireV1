@@ -351,8 +351,12 @@ export function BriefPreview({
                         {item.shade ? ` · ${item.shade}` : ""}
                       </td>
                       <td>
-                        Photo {item.sourceVersion} / Preview {item.version}{" "}
-                        (generated {item.renderVersion ?? item.version})
+                        Photo {item.sourceVersion} / Version {item.version}{" "}
+                        {item.status === "draft"
+                          ? "· Not rendered"
+                          : item.renderVersion !== undefined
+                            ? `(generated ${item.renderVersion})`
+                            : "· No completed render"}
                       </td>
                       <td>{item.approved ? "Approved" : "Not approved"}</td>
                     </tr>

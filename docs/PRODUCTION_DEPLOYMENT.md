@@ -1,5 +1,7 @@
 # GiftSquire production deployment
 
+Live and hosted-verified: https://giftsquire-v1.vercel.app . The Git-triggered build, matching SITE_URL, delivered email links, owner superadmin setup and hosted core journeys passed. See [hosted acceptance](HOSTED_VERIFICATION.md). Earlier future-tense setup instructions below remain operational guidance, not outstanding release work.
+
 The user authorized production deployment on 28 October 2026. This supersedes earlier instructions to defer deployment.
 
 ## Independent services
