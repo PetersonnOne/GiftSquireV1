@@ -25,4 +25,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## Current release boundary
-Finish all local PRD features and local acceptance first. Intended remote: https://github.com/PetersonnOne/GiftSquireV1 . Do not create or trigger a Vercel production deployment without a new explicit user approval.
+The user explicitly authorized GitHub-to-Vercel production deployment on 28 October 2026. Intended remote: https://github.com/PetersonnOne/GiftSquireV1 . Use only GiftSquire's Vercel project and its independent Convex production deployment; never alter CareTable. Keep provider and deployment keys server-only and preserve separate development configuration. Record hosted acceptance separately from local evidence.
