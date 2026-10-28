@@ -7,10 +7,10 @@ A clothing gift should feel like *them*. GiftSquire helps thoughtful gift-givers
 ## A more personal way to choose
 
 - **Two gifting paths:** invite the recipient to try privately, or prepare proposals from a photo they explicitly permitted you to use.
-- **Real YouCam clothing previews:** compare styles using the actual reference outfit and consented photo. Optional lipstick is presented as a labelled close-up alongside the full outfit.
+- **Real YouCam clothing previews:** compare styles using the actual reference outfit and consented photo. Compare Rose, Berry and Coral lipstick close-ups alongside the full outfit; selecting an existing shade reuses the saved result.
 - **Recipient-led approval:** a giver-created preview is a proposal. Only the recipient approves a gift; the final pick must use a current approved look.
-- **Your pace, your way:** User Mode and Interactive Mode for setup; Chat and Discuss with AI for reviewed style preferences.
-- **Thoughtful briefs:** a private Partner Brief for planning and a recipient Gift Brief using actual generated images, with print/PDF, image downloads and explicit reviewed Resend delivery.
+- **Your pace, your way:** User Mode and Interactive Mode for setup; Chat and Discuss with AI for overall wishes, an individual outfit or a private saved choice, with separate planning and user-reported post-purchase notes.
+- **Thoughtful briefs:** a private Partner Brief with relationship, the complete shortlist and image revisions for planning and a recipient Gift Brief using actual generated images, with print/PDF, image downloads and explicit reviewed Resend delivery.
 - **Privacy in the workflow:** photo provenance, controlled preview sharing, revocable invitations and approval checks tied to current image revisions.
 - **A welcoming studio:** numbered steps, live colour-coded stats, four appearances and email verification/password recovery.
 
@@ -31,7 +31,7 @@ The studio runs at `http://localhost:4327`. `npm run convex:dev` updates the lin
 
 ## Verification
 
-The optimized Next.js build, TypeScript checks and 28 automated tests pass. Chromium checks cover account recovery, mobile themes, shopping/approval, actual-image/PDF exports and reviewed email delivery. Both voice modes have completed real GPT Live handoffs in controlled QA. [Detailed evidence](VERIFICATION.md) records each run.
+The optimized Next.js build, TypeScript checks and 39 automated tests pass. Chromium checks cover account recovery, mobile themes, shopping/approval, actual-image/PDF exports and reviewed email delivery. Both voice modes have completed real GPT Live handoffs in controlled QA. [Detailed evidence](VERIFICATION.md) records each run.
 
 ## Explore the project
 
@@ -44,6 +44,6 @@ The optimized Next.js build, TypeScript checks and 28 automated tests pass. Chro
 
 ## What's next
 
-Complete look-specific feedback and Partner Brief detail, then connect independent GitHub/Vercel hosting, complete owner and hosted acceptance, then capture the walkthrough using verified application results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
+Review the completed local experience, then—with owner approval—configure independent production hosting and complete hosted acceptance. Capture the walkthrough using verified application results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
 
 Clothing and optional lipstick previews powered by **YouCam · Perfect Corp.**

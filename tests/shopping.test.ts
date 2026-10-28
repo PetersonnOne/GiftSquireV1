@@ -519,3 +519,366 @@ describe("recipient withdrawal", () => {
     ).toBe(true);
   });
 });
+
+describe("scoped planning and reported post-purchase feedback", () => {
+  it("updates only the selected look and keeps the rest of the space intact", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver);
+    await f.giver.mutation(api.spaces.approve, {
+      lookId: l.id,
+      version: l.version,
+      approved: true,
+    });
+    const before = await f.giver.query(api.spaces.get, { id: f.id });
+    await f.giver.mutation(api.discussion.save, {
+      spaceId: f.id,
+      scope: "look",
+      lookId: l.id,
+      stage: "planning",
+      purchaseConfirmed: false,
+      version: 1,
+      renderVersion: l.version,
+      text: "Prefer sleeves for this outfit.",
+    });
+    const after = await f.giver.query(api.spaces.get, { id: f.id });
+    expect(after.preferences).toBe(before.preferences);
+    expect(after.looks[0].feedback).toContain("sleeves");
+    expect(after.looks[0].approved).toBe(true);
+    expect(after.looks[1]).toEqual(before.looks[1]);
+    expect(after.messages.at(-1)?.lookId).toBe(l.id);
+    expect(after.messages.at(-1)?.purchaseReported).toBe(false);
+  });
+  it("requires an explicit purchase report and keeps planning and post-purchase notes distinct", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver);
+    const args = {
+      spaceId: f.id,
+      scope: "look" as const,
+      lookId: l.id,
+      stage: "post_purchase" as const,
+      version: 1,
+      renderVersion: l.version,
+      text: "I bought it and found the sleeves comfortable.",
+    };
+    await expect(
+      f.giver.mutation(api.discussion.save, {
+        ...args,
+        purchaseConfirmed: false,
+      }),
+    ).rejects.toThrow();
+    await f.giver.mutation(api.discussion.save, {
+      ...args,
+      purchaseConfirmed: true,
+    });
+    const s = await f.giver.query(api.spaces.get, { id: f.id });
+    expect(s.messages.at(-1)?.purchaseReported).toBe(true);
+    expect(s.looks[0].postPurchaseFeedback).toContain("bought");
+    expect(s.looks[0].planningFeedback).toBe("");
+    await expect(
+      f.giver.mutation(api.discussion.save, {
+        ...args,
+        scope: "space",
+        purchaseConfirmed: true,
+        version: s.preferenceVersion,
+      }),
+    ).rejects.toThrow();
+  });
+  it("does not let another space's look or an outdated render receive a reviewed note", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver),
+      other = await fixture("self");
+    await expect(
+      f.other.mutation(api.discussion.save, {
+        spaceId: f.id,
+        scope: "look",
+        lookId: l.id,
+        version: 1,
+        renderVersion: l.version,
+        text: "No access",
+      }),
+    ).rejects.toThrow();
+    const second = await f.giver.mutation(api.spaces.create, {
+      setup: JSON.stringify({ ...setup, journey: "self" }),
+      products: [PRODUCTS[0].id],
+    });
+    await expect(
+      f.giver.mutation(api.discussion.save, {
+        spaceId: second,
+        scope: "look",
+        lookId: l.id,
+        version: 1,
+        renderVersion: l.version,
+        text: "Wrong space",
+      }),
+    ).rejects.toThrow();
+    await f.giver.mutation(api.spaces.photo, {
+      id: f.id,
+      demo: true,
+      consent: true,
+    });
+    await expect(
+      f.giver.mutation(api.discussion.save, {
+        spaceId: f.id,
+        scope: "look",
+        lookId: l.id,
+        version: 1,
+        renderVersion: l.version,
+        text: "Old preview",
+      }),
+    ).rejects.toThrow();
+  });
+  it("keeps saved-choice discussion private to its owner and rejects a changed choice", async () => {
+    const f = await fixture(),
+      l = await completed(f);
+    await f.recipient.mutation(api.spaces.approve, {
+      lookId: l.id,
+      version: l.version,
+      approved: true,
+    });
+    await f.giver.mutation(api.spaces.select, {
+      lookId: l.id,
+      version: l.version,
+    });
+    await expect(
+      f.recipient.query(internal.styleContext.read, {
+        spaceId: f.id,
+        scope: "decision",
+        lookId: l.id,
+      }),
+    ).rejects.toThrow();
+    const ctx = await f.giver.query(internal.styleContext.read, {
+      spaceId: f.id,
+      scope: "decision",
+      lookId: l.id,
+    });
+    expect(ctx.target?.name).toBe(PRODUCTS[0].name);
+    expect(JSON.stringify(ctx)).not.toContain("photoUrl");
+    await f.recipient.mutation(api.spaces.approve, {
+      lookId: l.id,
+      version: l.version,
+      approved: false,
+    });
+    await expect(
+      f.giver.mutation(api.discussion.save, {
+        spaceId: f.id,
+        scope: "decision",
+        lookId: l.id,
+        version: 1,
+        renderVersion: l.version,
+        text: "Outdated saved choice",
+      }),
+    ).rejects.toThrow();
+  });
+  it("grounds voice in the actual look and refuses an unconfirmed post-purchase start before quota is used", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver);
+    await expect(
+      f.giver.mutation(internal.voice.reserve, {
+        requestId: "purchase-unconfirmed-123",
+        mode: "discussion",
+        context: "Invented purchase",
+        spaceId: f.id,
+        scope: "look",
+        lookId: l.id,
+        stage: "post_purchase",
+        purchaseConfirmed: false,
+      }),
+    ).rejects.toThrow();
+    const id = await f.giver.mutation(internal.voice.reserve, {
+      requestId: "scoped-voice-test-123",
+      mode: "discussion",
+      context: "Wrong outfit",
+      spaceId: f.id,
+      scope: "look",
+      lookId: l.id,
+      stage: "planning",
+    });
+    const row = await f.t.query(internal.voice.connection, { id });
+    const ctx = JSON.parse(row!.context);
+    expect(ctx.target.id).toBe(l.id);
+    expect(ctx.target.renderVersion).toBe(l.version);
+    expect(ctx.purchaseReported).toBe(false);
+    expect(row!.context).not.toContain("Wrong outfit");
+  });
+});
+describe("complete private Partner Brief", () => {
+  it("snapshots every candidate and relationship even when only one image is selected", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver);
+    const id = await f.giver.mutation(api.briefs.create, {
+      ...briefArgs(f.id, l.id),
+      kind: "partner",
+    });
+    const b = await f.giver.query(api.briefs.get, { id });
+    expect(b.relationship).toBe("Friend");
+    expect(b.shortlist).toHaveLength(3);
+    expect(b.images).toHaveLength(1);
+    expect(b.sourceRevision).toBeGreaterThan(0);
+    expect(b.images[0].renderRevision).toBe(l.version);
+    await f.t.run((ctx) =>
+      ctx.db.patch(b.shortlist[1].id, { version: b.shortlist[1].version + 1 }),
+    );
+    expect((await f.giver.query(api.briefs.get, { id })).stale).toBe(true);
+  });
+  it("never exposes the owner's complete shortlist metadata through a Gift Brief", async () => {
+    const f = await fixture("gift", "shared"),
+      l = await completed(f, f.giver);
+    const id = await f.giver.mutation(api.briefs.create, briefArgs(f.id, l.id));
+    const b = await f.giver.query(api.briefs.get, { id });
+    expect(b.relationship).toBeNull();
+    expect(b.shortlist).toHaveLength(0);
+    expect(b.budget).toBeNull();
+  });
+});
+describe("lipstick cache and approval integrity", () => {
+  it("selects a ready shade without paid work and invalidates only this look's approval", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver);
+    await f.giver.mutation(api.spaces.approve, {
+      lookId: l.id,
+      version: l.version,
+      approved: true,
+    });
+    const before = await f.giver.query(api.spaces.get, { id: f.id });
+    await f.t.run(async (ctx) => {
+      const look = await ctx.db.get(l.id),
+        resultId = await ctx.storage.store(
+          new Blob([new Uint8Array([4, 5, 6])], { type: "image/png" }),
+        );
+      await ctx.db.insert("shadePreviews", {
+        spaceId: f.id,
+        lookId: l.id,
+        sourceVersion: look!.sourceVersion,
+        baseResultId: look!.resultId!,
+        shade: "berry",
+        resultId,
+        renderVersion: 7,
+      });
+    });
+    await f.giver.mutation(api.spaces.preview, {
+      lookId: l.id,
+      version: l.version,
+      shade: "berry",
+    });
+    const after = await f.giver.query(api.spaces.get, { id: f.id });
+    expect(after.looks[0].lipstick).toBe("berry");
+    expect(after.looks[0].approved).toBe(false);
+    expect(after.looks[0].renderRevision).toBe(7);
+    expect(after.looks[0].resultUrl).toBe(before.looks[0].resultUrl);
+    expect(after.looks[1]).toEqual(before.looks[1]);
+    expect(
+      await f.t.run((ctx) => ctx.db.query("usageBuckets").collect()),
+    ).toHaveLength(0);
+  });
+  it("deletes cached shade artifacts when their photo is withdrawn", async () => {
+    const f = await fixture("self"),
+      l = await completed(f, f.giver);
+    const result = await f.t.run(async (ctx) => {
+      const look = await ctx.db.get(l.id),
+        resultId = await ctx.storage.store(
+          new Blob([new Uint8Array([4, 5, 6])], { type: "image/png" }),
+        );
+      await ctx.db.insert("shadePreviews", {
+        spaceId: f.id,
+        lookId: l.id,
+        sourceVersion: look!.sourceVersion,
+        baseResultId: look!.resultId!,
+        shade: "coral",
+        resultId,
+        renderVersion: 3,
+      });
+      return resultId;
+    });
+    await f.giver.mutation(api.spaces.deletePhoto, { id: f.id });
+    expect(
+      await f.t.run((ctx) => ctx.db.query("shadePreviews").collect()),
+    ).toHaveLength(0);
+    expect(await f.t.run((ctx) => ctx.storage.get(result))).toBeNull();
+  });
+});
+
+describe("private saved-choice discussion", () => {
+  it("does not reveal final-choice notes through recipient history, look notes or AI context", async () => {
+    const f = await fixture(),
+      l = await completed(f);
+    await f.recipient.mutation(api.spaces.approve, {
+      lookId: l.id,
+      version: l.version,
+      approved: true,
+    });
+    await f.giver.mutation(api.spaces.select, {
+      lookId: l.id,
+      version: l.version,
+    });
+    for (const stage of ["planning", "post_purchase"] as const)
+      await f.giver.mutation(api.discussion.save, {
+        spaceId: f.id,
+        scope: "decision",
+        lookId: l.id,
+        stage,
+        purchaseConfirmed: stage === "post_purchase",
+        version: 1,
+        renderVersion: l.version,
+        text: "Private surprise choice note",
+      });
+    const owner = await f.giver.query(api.spaces.get, { id: f.id }),
+      recipient = await f.recipient.query(api.spaces.get, { id: f.id });
+    expect(owner.decisionNotes).toHaveLength(2);
+    expect(recipient.decisionNotes).toHaveLength(0);
+    expect(recipient.messages.some((m) => m.scope === "decision")).toBe(false);
+    expect(recipient.looks[0].feedback).toBe("");
+    expect(recipient.looks[0].planningFeedback).toBe("");
+    expect(recipient.looks[0].postPurchaseFeedback).toBe("");
+    const ctx = await f.recipient.query(internal.styleContext.read, {
+      spaceId: f.id,
+      scope: "look",
+      lookId: l.id,
+    });
+    expect(ctx.preferences).not.toContain("Private surprise");
+  });
+});
+
+describe("duplicate render completion", () => {
+  it("retains an already committed artifact when its completion acknowledgement is repeated", async () => {
+    const f = await fixture(),
+      l = await completed(f);
+    const stored = await f.t.run((ctx) => ctx.db.get(l.id));
+    const result = await f.t.mutation(internal.spaces.jobPatch, {
+      lookId: l.id,
+      version: l.version,
+      status: "complete",
+      resultId: stored!.resultId!,
+    });
+    expect(result).toBe(false);
+    expect(
+      await f.t.run(
+        async (ctx) => (await ctx.storage.get(stored!.resultId!)) !== null,
+      ),
+    ).toBe(true);
+    const extra = await f.t.run((ctx) =>
+      ctx.storage.store(new Blob(["duplicate output"], { type: "image/png" })),
+    );
+    await f.t.mutation(internal.spaces.jobPatch, {
+      lookId: l.id,
+      version: l.version,
+      status: "complete",
+      resultId: extra,
+    });
+    expect(await f.t.run((ctx) => ctx.storage.get(extra))).toBeNull();
+    expect((await f.t.run((ctx) => ctx.db.get(l.id)))!.resultId).toBe(
+      stored!.resultId,
+    );
+    await f.t.run((ctx) => ctx.db.patch(l.id, { version: l.version + 1 }));
+    await f.t.mutation(internal.spaces.jobPatch, {
+      lookId: l.id,
+      version: l.version,
+      status: "complete",
+      resultId: stored!.resultId!,
+    });
+    expect(
+      await f.t.run(
+        async (ctx) => (await ctx.storage.get(stored!.resultId!)) !== null,
+      ),
+    ).toBe(true);
+  });
+});

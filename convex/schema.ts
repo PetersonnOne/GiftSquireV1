@@ -1,6 +1,7 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { partnerSnapshot } from "./model/briefSnapshot";
 import { permission, theme } from "./validators";
 
 export default defineSchema({
@@ -68,6 +69,7 @@ export default defineSchema({
     productId: v.string(),
     version: v.number(),
     sourceVersion: v.number(),
+    renderVersion: v.optional(v.number()),
     status: v.union(
       v.literal("draft"),
       v.literal("queued"),
@@ -85,6 +87,10 @@ export default defineSchema({
     rejected: v.boolean(),
     approvedBy: v.optional(v.id("users")),
     feedback: v.string(),
+    feedbackVersion: v.optional(v.number()),
+    feedbackStage: v.optional(
+      v.union(v.literal("planning"), v.literal("post_purchase")),
+    ),
     error: v.optional(v.string()),
     startedAt: v.optional(v.number()),
     outputExpiresAt: v.optional(v.number()),
@@ -93,12 +99,35 @@ export default defineSchema({
     .index("by_result", ["resultId"])
     .index("by_detail", ["detailId"])
     .index("by_crop", ["cropId"]),
+  decisionNotes: defineTable({
+    spaceId: v.id("spaces"),
+    ownerId: v.id("users"),
+    lookId: v.id("looks"),
+    stage: v.union(v.literal("planning"), v.literal("post_purchase")),
+    text: v.string(),
+    version: v.number(),
+    renderVersion: v.number(),
+  })
+    .index("by_space", ["spaceId"])
+    .index("by_target", ["spaceId", "lookId", "stage"]),
+  shadePreviews: defineTable({
+    spaceId: v.id("spaces"),
+    lookId: v.id("looks"),
+    sourceVersion: v.number(),
+    baseResultId: v.id("_storage"),
+    shade: v.string(),
+    resultId: v.id("_storage"),
+    renderVersion: v.number(),
+  })
+    .index("by_look", ["lookId"])
+    .index("by_result", ["resultId"]),
   briefs: defineTable({
     spaceId: v.id("spaces"),
     ownerId: v.id("users"),
     kind: v.union(v.literal("partner"), v.literal("gift")),
     sourceVersion: v.number(),
     preferenceVersion: v.number(),
+    partnerSnapshot: v.optional(partnerSnapshot),
     lookRefs: v.array(
       v.object({
         id: v.id("looks"),
@@ -134,7 +163,17 @@ export default defineSchema({
     actorId: v.id("users"),
     text: v.string(),
     lookId: v.optional(v.id("looks")),
-  }).index("by_space", ["spaceId"]),
+    scope: v.optional(
+      v.union(v.literal("space"), v.literal("look"), v.literal("decision")),
+    ),
+    stage: v.optional(
+      v.union(v.literal("planning"), v.literal("post_purchase")),
+    ),
+    purchaseReported: v.optional(v.boolean()),
+    renderVersion: v.optional(v.number()),
+  })
+    .index("by_space", ["spaceId"])
+    .index("by_look_stage", ["lookId", "stage"]),
   voiceConnections: defineTable({
     ownerId: v.id("users"),
     requestId: v.string(),

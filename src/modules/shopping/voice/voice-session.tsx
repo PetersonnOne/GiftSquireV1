@@ -36,6 +36,7 @@ export function VoiceSession({
   mode,
   context,
   spaceId,
+  topic,
   onReviewed,
   onClose,
   active = true,
@@ -43,6 +44,12 @@ export function VoiceSession({
   mode: "interactive" | "discussion";
   context: string;
   spaceId?: Id<"spaces">;
+  topic?: {
+    scope: "space" | "look" | "decision";
+    lookId?: Id<"looks">;
+    stage: "planning" | "post_purchase";
+    purchaseConfirmed: boolean;
+  };
   onReviewed: (draft: VoiceDraft) => Promise<void>;
   onClose: () => void;
   active?: boolean;
@@ -400,6 +407,7 @@ export function VoiceSession({
         requestId: crypto.randomUUID(),
         sdp: pc.localDescription?.sdp || "",
         ...(spaceId ? { spaceId } : {}),
+        ...(topic ?? {}),
       });
       if (generation !== epoch.current) {
         await stopVoice({ id: result.id });

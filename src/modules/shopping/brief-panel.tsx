@@ -312,7 +312,12 @@ export function BriefPreview({
         {brief.occasion && <p>For: {brief.occasion}</p>}
         {brief.kind === "partner" && (
           <>
+            <p>Relationship: {brief.relationship || "Not specified"}</p>
             <p>Style wishes: {brief.preferences || "Not specified"}</p>
+            <p className="fine">
+              Photo revision {brief.sourceRevision} · Prepared{" "}
+              {new Date(brief.createdAt).toLocaleString()}
+            </p>
             <p>
               Budget:{" "}
               {brief.budget
@@ -320,6 +325,42 @@ export function BriefPreview({
                 : "No budget limit set"}
             </p>
           </>
+        )}
+        {brief.kind === "partner" && (
+          <section className="gs-brief-shortlist">
+            <h3>Complete shortlist</h3>
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Outfit</th>
+                    <th>Preview</th>
+                    <th>Revisions</th>
+                    <th>Approval</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {brief.shortlist.map((item) => (
+                    <tr key={item.id}>
+                      <td>
+                        {item.name}
+                        {brief.selectedId === item.id ? " · Final choice" : ""}
+                      </td>
+                      <td>
+                        {item.status}
+                        {item.shade ? ` · ${item.shade}` : ""}
+                      </td>
+                      <td>
+                        Photo {item.sourceVersion} / Preview {item.version}{" "}
+                        (generated {item.renderVersion ?? item.version})
+                      </td>
+                      <td>{item.approved ? "Approved" : "Not approved"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
         )}
         <div className="gs-brief-images">
           {brief.images.map((image) => (
@@ -345,6 +386,12 @@ export function BriefPreview({
               )}
               <figcaption>
                 <strong>{image.name}</strong>
+                {brief.kind === "partner" && (
+                  <p className="fine">
+                    Photo revision {image.sourceRevision} · Render revision{" "}
+                    {image.renderRevision}
+                  </p>
+                )}
                 <p>
                   {image.approved
                     ? "Recipient-approved"

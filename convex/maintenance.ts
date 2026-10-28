@@ -27,7 +27,11 @@ export const sweepUploads = internalMutation({
         .query("looks")
         .withIndex("by_crop", (q) => q.eq("cropId", file._id))
         .first();
-      if (!source && !result && !detail && !crop) {
+      const variant = await ctx.db
+        .query("shadePreviews")
+        .withIndex("by_result", (q) => q.eq("resultId", file._id))
+        .first();
+      if (!source && !result && !detail && !crop && !variant) {
         await ctx.storage.delete(file._id);
         removed++;
       }

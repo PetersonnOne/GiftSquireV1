@@ -1,3 +1,4 @@
+import { discussionArgs, discussionContext } from "./model/discussion";
 import { ConvexError, v } from "convex/values";
 import {
   internalMutation,
@@ -17,6 +18,7 @@ export const reserve = internalMutation({
     mode: v.union(v.literal("interactive"), v.literal("discussion")),
     context: v.string(),
     spaceId: v.optional(v.id("spaces")),
+    ...discussionArgs,
   },
   returns: v.id("voiceConnections"),
   handler: async (ctx, args) => {
@@ -51,14 +53,9 @@ export const reserve = internalMutation({
     if (args.mode === "discussion") {
       if (!args.spaceId)
         throw new ConvexError("Choose a shopping space first.");
-      const { space } = await access(ctx, args.spaceId);
-      context = JSON.stringify({
-        mode: "discussion",
-        title: space.title,
-        journey: space.journey,
-        preferences: space.preferences,
-        occasion: space.occasion,
-      });
+      context = JSON.stringify(
+        await discussionContext(ctx, args.spaceId, args),
+      );
     }
     for (const [key, limit] of [
       [`voice:${user._id}:${new Date().toISOString().slice(0, 10)}`, 6],

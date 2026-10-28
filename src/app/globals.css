@@ -3359,6 +3359,9 @@ footer .logo-lockup {
   }
   .gs-brief-document {
     padding: 0;
+    --muted: #333;
+    --line: #bbb;
+    color: #111;
   }
   .gs-brief-preview {
     border: 0;
@@ -3390,4 +3393,77 @@ footer .logo-lockup {
   font-size: 10px;
   color: var(--muted);
   margin-top: 7px;
+}
+
+.gs-shade-comparison {
+  margin: 18px 0;
+}
+.gs-shade-comparison > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.gs-shade-comparison figure {
+  margin: 0;
+}
+.gs-shade-comparison img {
+  width: 100%;
+  height: 115px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+}
+.gs-shade-comparison figcaption {
+  font-size: 10px;
+  margin: 7px 0;
+}
+.gs-shade-comparison button {
+  padding: 7px !important;
+  font-size: 10px !important;
+}
+.gs-brief-shortlist {
+  margin: 25px 0;
+}
+.gs-brief-shortlist table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.gs-brief-shortlist th,
+.gs-brief-shortlist td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.gs-message-log small {
+  display: block;
+  font-size: 9px;
+  color: var(--muted);
+}
+.gs-message-log p {
+  margin-bottom: 6px;
+}
+@media (max-width: 520px) {
+  .gs-brief-document {
+    padding: 20px;
+  }
+  .gs-brief-shortlist table {
+    font-size: 10px;
+  }
+  .gs-brief-shortlist th,
+  .gs-brief-shortlist td {
+    padding: 7px;
+  }
+}
+@media print {
+  .gs-brief-shortlist th {
+    background: #eee;
+    color: #111;
+  }
+  .gs-brief-shortlist tr {
+    break-inside: avoid;
+  }
+  .gs-brief-shortlist thead {
+    display: table-header-group;
+  }
 }

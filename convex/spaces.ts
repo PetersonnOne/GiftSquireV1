@@ -9,6 +9,8 @@ import {
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
+import { readLookNote } from "./model/lookNotes";
+import { clearShadeCache } from "./model/shadeCache";
 import { requireUser } from "./model/access";
 import { PRODUCTS } from "./catalog";
 import {
@@ -52,12 +54,15 @@ async function invalidate(ctx: MutationCtx, id: Id<"spaces">, version: number) {
     .query("looks")
     .withIndex("by_space", (q) => q.eq("spaceId", id))
     .collect()) {
+    const removed = await clearShadeCache(ctx, look._id);
     if (look.resultId) await ctx.storage.delete(look.resultId);
-    if (look.detailId) await ctx.storage.delete(look.detailId);
+    if (look.detailId && !removed.has(look.detailId))
+      await ctx.storage.delete(look.detailId);
     if (look.cropId) await ctx.storage.delete(look.cropId);
     await ctx.db.patch(look._id, {
       version: look.version + 1,
       sourceVersion: version,
+      renderVersion: undefined,
       status: "draft",
       resultId: undefined,
       detailId: undefined,
@@ -166,6 +171,11 @@ export const get = query({
     const messages = await ctx.db
       .query("feedback")
       .withIndex("by_space", (q) => q.eq("spaceId", id))
+      .filter((q) =>
+        s.ownerId === user._id
+          ? q.eq(q.field("spaceId"), id)
+          : q.neq(q.field("scope"), "decision"),
+      )
       .order("desc")
       .take(30);
     return {
@@ -195,15 +205,62 @@ export const get = query({
             : null
         : null,
       selectedId: s.ownerId === user._id ? (s.selectionId ?? null) : null,
+      decisionNotes:
+        s.ownerId === user._id
+          ? (
+              await ctx.db
+                .query("decisionNotes")
+                .withIndex("by_space", (q) => q.eq("spaceId", id))
+                .collect()
+            ).map((n) => ({
+              lookId: n.lookId,
+              stage: n.stage,
+              text: n.text,
+              version: n.version,
+            }))
+          : [],
       looks: await Promise.all(
         looks.map(async (l) => ({
           id: l._id,
           productId: l.productId,
           version: l.version,
+          sourceVersion: l.sourceVersion,
+          feedback: l.feedback,
+          feedbackVersion: l.feedbackVersion ?? 1,
+          feedbackStage: l.feedbackStage ?? "planning",
+          planningFeedback:
+            (await readLookNote(ctx, l._id, "planning"))?.text ??
+            ((l.feedbackStage ?? "planning") === "planning" ? l.feedback : ""),
+          postPurchaseFeedback:
+            (await readLookNote(ctx, l._id, "post_purchase"))?.text ??
+            (l.feedbackStage === "post_purchase" ? l.feedback : ""),
           status: l.status,
           approved: validApproval(l, s.version),
           rejected: l.rejected,
           lipstick: l.lipstick ?? null,
+          renderRevision: l.renderVersion ?? l.version,
+          shadePreviews:
+            operator || s.sharePreviews
+              ? await Promise.all(
+                  (
+                    await ctx.db
+                      .query("shadePreviews")
+                      .withIndex("by_look", (q) => q.eq("lookId", l._id))
+                      .collect()
+                  )
+                    .filter(
+                      (v) =>
+                        v.baseResultId === l.resultId &&
+                        v.sourceVersion === s.version,
+                    )
+                    .map(async (v) => ({
+                      id: v._id,
+                      shade: v.shade,
+                      renderRevision: v.renderVersion,
+                      url: (await ctx.storage.getUrl(v.resultId))!,
+                    })),
+                )
+              : [],
           error: l.error ?? null,
           detailUrl:
             (operator || s.sharePreviews) && l.detailId
@@ -215,9 +272,16 @@ export const get = query({
               : null,
         })),
       ),
-      messages: messages
-        .reverse()
-        .map((m) => ({ id: m._id, text: m.text, own: m.actorId === user._id })),
+      messages: messages.reverse().map((m) => ({
+        id: m._id,
+        text: m.text,
+        own: m.actorId === user._id,
+        lookId: m.lookId ?? null,
+        scope: m.scope ?? "space",
+        stage: m.stage ?? "planning",
+        purchaseReported: m.purchaseReported ?? false,
+        renderVersion: m.renderVersion ?? null,
+      })),
     };
   },
 });
@@ -497,12 +561,55 @@ export const preview = mutation({
       shade &&
       (!SHADES.some((s) => s.id === shade) ||
         l.status !== "complete" ||
-        !l.resultId ||
-        l.lipstick)
+        !l.resultId)
     )
       throw new ConvexError(
-        "Start with a completed outfit preview. Recreate the outfit to try another shade.",
+        "Start with a completed outfit preview before trying a lipstick shade.",
       );
+    if (shade && l.resultId) {
+      const variants = await ctx.db
+        .query("shadePreviews")
+        .withIndex("by_look", (q) => q.eq("lookId", lookId))
+        .collect();
+      if (
+        l.detailId &&
+        l.lipstick &&
+        !variants.some((v) => v.resultId === l.detailId)
+      )
+        await ctx.db.insert("shadePreviews", {
+          spaceId: l.spaceId,
+          lookId,
+          sourceVersion: l.sourceVersion,
+          baseResultId: l.resultId,
+          shade: l.lipstick,
+          resultId: l.detailId,
+          renderVersion: l.renderVersion ?? l.version,
+        });
+      if (l.detailId && l.lipstick === shade) return { cached: true };
+      const cached = variants.find(
+        (v) =>
+          v.shade === shade &&
+          v.baseResultId === l.resultId &&
+          v.sourceVersion === space.version,
+      );
+      if (cached) {
+        if (cached.resultId === l.detailId && l.lipstick === shade)
+          return { cached: true };
+        await ctx.db.patch(lookId, {
+          version: l.version + 1,
+          renderVersion: cached.renderVersion,
+          detailId: cached.resultId,
+          lipstick: shade,
+          approved: false,
+          rejected: false,
+          approvedBy: undefined,
+          error: undefined,
+        });
+        if (space.selectionId === lookId)
+          await ctx.db.patch(space._id, { selectionId: undefined });
+        return { cached: true };
+      }
+    }
     for (const [key, max] of [
       [`render:user:${user._id}:${Math.floor(Date.now() / 3600000)}`, 12],
       [`render:shared:${new Date().toISOString().slice(0, 10)}`, 90],
@@ -518,7 +625,11 @@ export const preview = mutation({
       if (b) await ctx.db.patch(b._id, { count: b.count + 1 });
       else await ctx.db.insert("usageBuckets", { key, count: 1 });
     }
-    if (l.detailId) await ctx.storage.delete(l.detailId);
+    if (!shade) {
+      const removed = await clearShadeCache(ctx, lookId);
+      if (l.detailId && !removed.has(l.detailId))
+        await ctx.storage.delete(l.detailId);
+    }
     const next = l.version + 1;
     await ctx.db.patch(lookId, {
       version: next,
@@ -538,6 +649,7 @@ export const preview = mutation({
       version: next,
       makeup: !!shade,
     });
+    return { cached: false };
   },
 });
 export const job = internalQuery({
@@ -579,6 +691,15 @@ export const jobPatch = internalMutation({
   handler: async (ctx, { lookId, version, makeupFailed, ...patch }) => {
     const l = await ctx.db.get(lookId),
       s = l ? await ctx.db.get(l.spaceId) : null;
+    async function discardUnreferenced(fileId?: Id<"_storage">) {
+      if (!fileId || [l?.resultId, l?.detailId, l?.cropId].includes(fileId))
+        return;
+      const cached = await ctx.db
+        .query("shadePreviews")
+        .withIndex("by_result", (q) => q.eq("resultId", fileId))
+        .first();
+      if (!cached) await ctx.storage.delete(fileId);
+    }
     if (
       !l ||
       !s ||
@@ -586,18 +707,42 @@ export const jobPatch = internalMutation({
       l.version !== version ||
       l.sourceVersion !== s.version
     ) {
-      if (patch.resultId) await ctx.storage.delete(patch.resultId);
-      if (patch.detailId) await ctx.storage.delete(patch.detailId);
-      if (patch.cropId) await ctx.storage.delete(patch.cropId);
+      await discardUnreferenced(patch.resultId);
+      await discardUnreferenced(patch.detailId);
+      await discardUnreferenced(patch.cropId);
       return false;
     }
-    if (patch.resultId && l.resultId) await ctx.storage.delete(l.resultId);
+    if (
+      patch.status === "complete" &&
+      l.status === "complete" &&
+      (patch.resultId || patch.detailId)
+    ) {
+      await discardUnreferenced(patch.resultId);
+      await discardUnreferenced(patch.detailId);
+      return false;
+    }
+    if (patch.detailId && l.resultId && l.lipstick) {
+      await ctx.db.insert("shadePreviews", {
+        spaceId: l.spaceId,
+        lookId,
+        sourceVersion: l.sourceVersion,
+        baseResultId: l.resultId,
+        shade: l.lipstick,
+        resultId: patch.detailId,
+        renderVersion: version,
+      });
+    }
+    if (patch.resultId && l.resultId) {
+      await clearShadeCache(ctx, lookId);
+      await ctx.storage.delete(l.resultId);
+    }
     if (patch.status !== "running" && l.cropId) {
       await ctx.storage.delete(l.cropId);
       patch.cropId = undefined;
     }
     await ctx.db.patch(lookId, {
       ...patch,
+      ...(patch.resultId || patch.detailId ? { renderVersion: version } : {}),
       ...(patch.status === "complete" ? { error: undefined } : {}),
       ...(makeupFailed
         ? { status: "complete" as const, lipstick: undefined }

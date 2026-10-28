@@ -484,7 +484,8 @@ function SpaceView({
     [working, setWorking] = useState(false),
     [consent, setConsent] = useState(false),
     [link, setLink] = useState(""),
-    [compare, setCompare] = useState(false);
+    [compare, setCompare] = useState(false),
+    [unavailablePhoto, setUnavailablePhoto] = useState<string | null>(null);
   const lock = useRef(false);
   const photo = useMutation(api.spaces.photo),
     upload = useMutation(api.spaces.uploadUrl),
@@ -645,12 +646,28 @@ function SpaceView({
                 </div>
               </div>
               <div className="gs-photo-area">
-                {space.photoUrl ? (
-                  <img src={space.photoUrl} alt="Your current try-on source" />
+                {space.photoUrl && unavailablePhoto !== space.photoUrl ? (
+                  <img
+                    src={space.photoUrl}
+                    alt="Your current try-on source"
+                    onError={() => setUnavailablePhoto(space.photoUrl)}
+                  />
                 ) : (
                   <div className="gs-photo-placeholder">
                     <span>◌</span>
-                    <p>Your photo stays under your control.</p>
+                    <p>
+                      {space.photoUrl
+                        ? "The source image could not load. Your saved previews are still available."
+                        : "Your photo stays under your control."}
+                    </p>
+                    {space.photoUrl && (
+                      <button
+                        className="text-button"
+                        onClick={() => setUnavailablePhoto(null)}
+                      >
+                        Reload source image
+                      </button>
+                    )}
                   </div>
                 )}
                 <div>
@@ -842,6 +859,52 @@ function SpaceView({
                           <figcaption>Lipstick close-up · YouCam</figcaption>
                         </figure>
                       )}
+                      {l.shadePreviews.length > 0 && (
+                        <section
+                          className="gs-shade-comparison"
+                          aria-label={`Compare lipstick for ${p.name}`}
+                        >
+                          <h4>Compare lipstick close-ups</h4>
+                          <div>
+                            {l.shadePreviews.map((v) => (
+                              <figure key={v.id}>
+                                <img
+                                  src={v.url}
+                                  alt={`${SHADES.find((s) => s.id === v.shade)?.name ?? v.shade} lipstick on ${p.name}`}
+                                />
+                                <figcaption>
+                                  {SHADES.find((s) => s.id === v.shade)?.name}
+                                </figcaption>
+                                {shopper && (
+                                  <button
+                                    className="button outline small"
+                                    disabled={
+                                      working ||
+                                      l.status !== "complete" ||
+                                      l.lipstick === v.shade
+                                    }
+                                    onClick={() =>
+                                      void run(
+                                        () =>
+                                          preview({
+                                            lookId: l.id,
+                                            version: l.version,
+                                            shade: v.shade,
+                                          }),
+                                        "Saved shade selected. Review before approving the updated look.",
+                                      )
+                                    }
+                                  >
+                                    {l.lipstick === v.shade
+                                      ? "Selected"
+                                      : "Use this shade"}
+                                  </button>
+                                )}
+                              </figure>
+                            ))}
+                          </div>
+                        </section>
+                      )}
                       {l.lipstick && (
                         <p className="fine">
                           Lipstick:{" "}
@@ -941,44 +1004,42 @@ function SpaceView({
                               </button>
                             )}
                           </div>
-                          {shopper &&
-                            l.status === "complete" &&
-                            !l.lipstick && (
-                              <details>
-                                <summary>
-                                  Complete my look · optional lipstick
-                                </summary>
-                                <p className="fine">
-                                  YouCam creates a lipstick close-up from this
-                                  outfit preview. The full outfit stays
-                                  alongside it. Review and approve the updated
-                                  look again.
-                                </p>
-                                <div className="gs-shades">
-                                  {SHADES.map((s) => (
-                                    <button
-                                      key={s.id}
-                                      className="button outline small"
-                                      disabled={working}
-                                      onClick={() =>
-                                        void run(
-                                          () =>
-                                            preview({
-                                              lookId: l.id,
-                                              version: l.version,
-                                              shade: s.id,
-                                            }),
-                                          "Lipstick preview requested.",
-                                        )
-                                      }
-                                    >
-                                      <i style={{ background: s.hex }} />
-                                      {s.name}
-                                    </button>
-                                  ))}
-                                </div>
-                              </details>
-                            )}
+                          {shopper && l.status === "complete" && (
+                            <details>
+                              <summary>
+                                Complete my look · optional lipstick
+                              </summary>
+                              <p className="fine">
+                                YouCam creates a lipstick close-up from this
+                                outfit preview. The full outfit stays alongside
+                                it. Review and approve the updated look again.
+                              </p>
+                              <div className="gs-shades">
+                                {SHADES.map((s) => (
+                                  <button
+                                    key={s.id}
+                                    aria-pressed={l.lipstick === s.id}
+                                    className="button outline small"
+                                    disabled={working}
+                                    onClick={() =>
+                                      void run(
+                                        () =>
+                                          preview({
+                                            lookId: l.id,
+                                            version: l.version,
+                                            shade: s.id,
+                                          }),
+                                        "Shade selected or requested. Existing ready shades are reused without a new render.",
+                                      )
+                                    }
+                                  >
+                                    <i style={{ background: s.hex }} />
+                                    {s.name}
+                                  </button>
+                                ))}
+                              </div>
+                            </details>
+                          )}
                         </>
                       )}
                     </div>
@@ -1064,11 +1125,9 @@ function SpaceView({
             id={id}
             version={space.preferenceVersion}
             preferences={space.preferences}
-            context={JSON.stringify({
-              title: space.title,
-              journey: space.journey,
-              preferences: space.preferences,
-            })}
+            looks={space.looks}
+            selectedId={space.selectedId}
+            decisionNotes={space.decisionNotes}
             messages={space.messages}
           />
         </aside>
@@ -1076,41 +1135,230 @@ function SpaceView({
     </>
   );
 }
+type TopicSnapshot = {
+  scope: "space" | "look" | "decision";
+  lookId?: Id<"looks">;
+  stage: "planning" | "post_purchase";
+  purchaseConfirmed: boolean;
+  version: number;
+  renderVersion?: number;
+  label: string;
+  key: string;
+};
+type DiscussionLook = {
+  id: Id<"looks">;
+  productId: string;
+  version: number;
+  feedback: string;
+  feedbackVersion: number;
+  feedbackStage: string;
+  planningFeedback: string;
+  postPurchaseFeedback: string;
+};
 function Discussion({
   id,
   version,
   preferences,
-  context,
+  looks,
+  selectedId,
+  decisionNotes,
   messages,
 }: {
   id: Id<"spaces">;
   version: number;
   preferences: string;
-  context: string;
-  messages: { id: Id<"feedback">; text: string; own: boolean }[];
+  looks: DiscussionLook[];
+  selectedId: Id<"looks"> | null;
+  decisionNotes: {
+    lookId: Id<"looks">;
+    stage: string;
+    text: string;
+    version: number;
+  }[];
+  messages: {
+    id: Id<"feedback">;
+    text: string;
+    own: boolean;
+    lookId?: Id<"looks"> | null;
+    scope?: string;
+    stage?: string;
+    purchaseReported?: boolean;
+    renderVersion?: number | null;
+  }[];
 }) {
-  const [mode, setMode] = useState<"chat" | "voice">("chat"),
-    [text, setText] = useState(""),
+  const [choice, setChoice] = useState("space"),
+    [stage, setStage] = useState<"planning" | "post_purchase">("planning"),
+    [reported, setReported] = useState(false),
+    [mode, setMode] = useState<"chat" | "voice">("chat"),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
-    [reply, setReply] = useState(""),
-    [proposal, setProposal] = useState<string | null>(null),
-    [baseVersion, setBaseVersion] = useState(version);
-  const lock = useRef(false);
-  const discuss = useAction(api.styleGuide.discuss),
-    update = useMutation(api.spaces.update),
-    message = useMutation(api.spaces.message);
-  async function apply(value: string) {
-    await update({ id, version: baseVersion, preferences: value });
-    setProposal(null);
-    setReply(
-      "Your reviewed preference is saved. Existing images and approvals are unchanged. Recreate a preview explicitly if you want a new image.",
+    [error, setError] = useState("");
+  const [drafts, setDrafts] = useState<Record<string, string>>({}),
+    [proposals, setProposals] = useState<
+      Record<string, { topic: TopicSnapshot; text: string }>
+    >({}),
+    [replies, setReplies] = useState<Record<string, string>>({});
+  const [turns, setTurns] = useState<
+    Record<string, { speaker: string; text: string }[]>
+  >({});
+  const [threads, setThreads] = useState<
+      { id: string; topic: TopicSnapshot }[]
+    >([]),
+    [activeThread, setActiveThread] = useState<string | null>(null);
+  const lock = useRef(false),
+    discuss = useAction(api.styleGuide.discuss),
+    save = useMutation(api.discussion.save);
+  const scope =
+      choice === "space"
+        ? "space"
+        : choice === "decision"
+          ? "decision"
+          : "look",
+    look = looks.find(
+      (l) => l.id === (scope === "decision" ? selectedId : choice),
     );
+  const key = choice + ":" + (look?.id ?? "space") + ":" + stage,
+    label =
+      scope === "space"
+        ? "Overall style wishes"
+        : `${scope === "decision" ? "Saved choice: " : ""}${PRODUCTS.find((p) => p.id === look?.productId)?.name ?? "Choose an outfit"}`;
+  const topic: TopicSnapshot = {
+    scope,
+    lookId: look?.id,
+    stage,
+    purchaseConfirmed: reported,
+    version:
+      scope === "decision"
+        ? (decisionNotes.find((n) => n.lookId === look?.id && n.stage === stage)
+            ?.version ?? 1)
+        : (look?.feedbackVersion ?? version),
+    renderVersion: look?.version,
+    label,
+    key,
+  };
+  const ready =
+      (scope === "space" || !!look) && (stage !== "post_purchase" || reported),
+    text = drafts[key] ?? "",
+    proposal = proposals[key];
+  const initial =
+    scope === "decision"
+      ? (decisionNotes.find((n) => n.lookId === look?.id && n.stage === stage)
+          ?.text ?? "")
+      : scope === "space"
+        ? preferences
+        : stage === "planning"
+          ? (look?.planningFeedback ?? "")
+          : (look?.postPurchaseFeedback ?? "");
+
+  function args(t: TopicSnapshot) {
+    return {
+      scope: t.scope,
+      lookId: t.lookId,
+      stage: t.stage,
+      purchaseConfirmed: t.purchaseConfirmed,
+    };
   }
+  async function apply(value: string, snapshot: TopicSnapshot) {
+    await save({
+      spaceId: id,
+      ...args(snapshot),
+      version: snapshot.version,
+      renderVersion: snapshot.renderVersion,
+      text: value,
+    });
+    setProposals((p) => {
+      const next = { ...p };
+      delete next[snapshot.key];
+      return next;
+    });
+    setReplies((r) => ({
+      ...r,
+      [snapshot.key]:
+        "Your reviewed note is saved for this topic. Existing images, approvals and unrelated choices are unchanged.",
+    }));
+  }
+  function voice() {
+    if (!ready) return;
+    const previous = [...threads]
+      .reverse()
+      .find(
+        (t) =>
+          t.topic.key === key &&
+          t.topic.version === topic.version &&
+          t.topic.renderVersion === topic.renderVersion,
+      );
+    if (previous) setActiveThread(previous.id);
+    else {
+      const entry = { id: crypto.randomUUID(), topic };
+      setThreads((t) => [...t, entry]);
+      setActiveThread(entry.id);
+    }
+    setMode("voice");
+    setError("");
+  }
+  const history = messages
+    .filter((m) => (scope === "space" ? !m.lookId : m.lookId === look?.id))
+    .filter((m) => (m.scope ?? (m.lookId ? "look" : "space")) === scope)
+    .filter((m) => (m.stage ?? "planning") === stage);
   return (
     <section className="panel gs-discussion">
       <span className="eyebrow">A LITTLE BACK & FORTH</span>
       <h3>Talk it through.</h3>
+      <label>
+        Discussion topic
+        <select
+          value={choice}
+          disabled={busy || mode === "voice"}
+          onChange={(e) => {
+            setChoice(e.target.value);
+            setError("");
+            if (e.target.value === "space") {
+              setStage("planning");
+              setReported(false);
+            }
+          }}
+        >
+          <option value="space">Overall style wishes</option>
+          {selectedId && <option value="decision">My saved choice</option>}
+          {looks.map((l) => (
+            <option key={l.id} value={l.id}>
+              {PRODUCTS.find((p) => p.id === l.productId)?.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Feedback stage
+        <select
+          value={stage}
+          disabled={scope === "space" || busy || mode === "voice"}
+          onChange={(e) => {
+            setStage(e.target.value as typeof stage);
+            setReported(false);
+            setError("");
+          }}
+        >
+          <option value="planning">Before purchase · planning</option>
+          <option value="post_purchase">After purchase · my report</option>
+        </select>
+      </label>
+      {stage === "post_purchase" && (
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={reported}
+            disabled={busy || mode === "voice"}
+            onChange={(e) => setReported(e.target.checked)}
+          />
+          I report that this item was purchased. This is my own report, not a
+          verified transaction.
+        </label>
+      )}
+      <p className="fine">
+        {label}.{" "}
+        {stage === "post_purchase"
+          ? "Your experience is recorded as reported feedback; a preview or approval never proves a purchase."
+          : "Discuss your plans, then review before saving."}
+      </p>
       <div className="gs-mode-tabs" role="group" aria-label="Feedback mode">
         <button
           aria-pressed={mode === "chat"}
@@ -1122,46 +1370,68 @@ function Discussion({
         <button
           aria-pressed={mode === "voice"}
           className={mode === "voice" ? "active" : ""}
-          onClick={() => {
-            setBaseVersion(version);
-            setMode("voice");
-          }}
+          disabled={!ready || busy}
+          onClick={voice}
         >
           ◌ Discuss with AI
         </button>
       </div>
-      <p className="fine">
-        {mode === "chat"
-          ? "Your Style Guide helps refine your wishes. Review the proposal before saving."
-          : "Discuss your wishes out loud, then review and confirm. Five minutes per session."}
-      </p>
       <div hidden={mode !== "chat"}>
         <div className="gs-message-log" role="log">
           <p className="gs-assistant">
-            What would make these choices feel more like you?
+            What would you like to improve about{" "}
+            {scope === "space" ? "your style wishes" : "this outfit"}?
           </p>
-          {messages.map((m) => (
-            <p key={m.id} className={m.own ? "gs-user" : "gs-assistant"}>
-              {m.text}
+          {history.map((m) => (
+            <div key={m.id} className={m.own ? "gs-user" : "gs-assistant"}>
+              <small>
+                {m.purchaseReported
+                  ? "User-reported post-purchase feedback"
+                  : "Planning note"}
+                {m.renderVersion
+                  ? ` · preview revision ${m.renderVersion}`
+                  : ""}
+              </small>
+              <p>{m.text}</p>
+            </div>
+          ))}
+          {turns[key]?.map((turn, i) => (
+            <p
+              key={i}
+              className={turn.speaker === "You" ? "gs-user" : "gs-assistant"}
+            >
+              <strong>{turn.speaker}</strong> {turn.text}
             </p>
           ))}
-          {reply && <p className="gs-assistant">{reply}</p>}
+          {replies[key] && <p className="gs-assistant">{replies[key]}</p>}
         </div>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            if (lock.current || !text.trim()) return;
+            if (lock.current || !text.trim() || !ready) return;
             lock.current = true;
             setBusy(true);
             setError("");
-            const draft = text;
+            const snapshot = topic;
             try {
-              const out = await discuss({ spaceId: id, text: draft });
-              setReply(out.reply);
-              setProposal(out.preference);
-              setBaseVersion(version);
-              await message({ id, text: draft });
-              setText("");
+              const out = await discuss({
+                spaceId: id,
+                text,
+                ...args(snapshot),
+              });
+              setTurns((t) => ({
+                ...t,
+                [key]: [
+                  ...(t[key] ?? []),
+                  { speaker: "You", text },
+                  { speaker: "Style Guide", text: out.reply },
+                ],
+              }));
+              setProposals((p) => ({
+                ...p,
+                [key]: { topic: snapshot, text: out.preference },
+              }));
+              setDrafts((d) => ({ ...d, [key]: "" }));
             } catch (e) {
               setError(errorText(e));
             } finally {
@@ -1178,30 +1448,46 @@ function Discussion({
             rows={3}
             maxLength={1000}
             value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="A softer colour? Something more relaxed?"
+            onChange={(e) =>
+              setDrafts((d) => ({ ...d, [key]: e.target.value }))
+            }
+            placeholder="What would make this feel more like you?"
           />
-          <button className="button" disabled={busy || !text.trim()}>
+          <button className="button" disabled={busy || !text.trim() || !ready}>
             {busy ? "Thinking…" : "Send to Style Guide ↑"}
           </button>
         </form>
-        {proposal !== null && (
+        {proposal && (
           <div className="voice-review">
-            <h4>Review the preference</h4>
+            <h4>
+              Review the{" "}
+              {proposal.topic.scope === "space" ? "preference" : "outfit note"}
+            </h4>
+            <p className="fine">
+              {proposal.topic.label} ·{" "}
+              {proposal.topic.stage === "post_purchase"
+                ? "User-reported after purchase"
+                : "Planning"}
+            </p>
             <textarea
               maxLength={600}
-              value={proposal}
-              onChange={(e) => setProposal(e.target.value)}
+              value={proposal.text}
+              onChange={(e) =>
+                setProposals((p) => ({
+                  ...p,
+                  [key]: { ...proposal, text: e.target.value },
+                }))
+              }
             />
             <button
               className="button"
-              disabled={busy}
+              disabled={busy || !ready || !proposal.text.trim()}
               onClick={async () => {
                 if (lock.current) return;
                 lock.current = true;
                 setBusy(true);
                 try {
-                  await apply(proposal);
+                  await apply(proposal.text, proposal.topic);
                 } catch (e) {
                   setError(errorText(e));
                 } finally {
@@ -1210,66 +1496,112 @@ function Discussion({
                 }
               }}
             >
-              Confirm & save preference
+              Confirm & save {scope === "space" ? "preference" : "outfit note"}
             </button>
-            <button className="text-button" onClick={() => setProposal(null)}>
+            <button
+              className="text-button"
+              onClick={() =>
+                setProposals((p) => {
+                  const next = { ...p };
+                  delete next[key];
+                  return next;
+                })
+              }
+            >
               Discard proposal
             </button>
           </div>
         )}
         <details>
-          <summary>Or edit preferences directly</summary>
+          <summary>Or edit this topic directly</summary>
           <PreferenceEditor
-            key={preferences}
-            value={preferences}
-            onSave={async (value) => {
-              setBaseVersion(version);
-              await update({ id, version, preferences: value });
-            }}
+            key={key}
+            value={initial}
+            enabled={ready}
+            onSave={(value) => apply(value, topic)}
           />
         </details>
-        {error && (
-          <p className="alert" role="alert">
-            {error}
-          </p>
-        )}
       </div>
-      {
-        <div hidden={mode !== "voice"}>
+      {threads.map((t) => (
+        <div key={t.id} hidden={mode !== "voice" || activeThread !== t.id}>
+          <p className="fine">
+            Voice topic: {t.topic.label} ·{" "}
+            {t.topic.stage === "post_purchase"
+              ? "Your post-purchase report"
+              : "Planning"}
+            . Five minutes maximum.
+          </p>
           <VoiceSession
             mode="discussion"
             spaceId={id}
-            context={context}
-            active={mode === "voice"}
+            topic={args(t.topic)}
+            context={JSON.stringify(t.topic)}
+            active={mode === "voice" && activeThread === t.id}
             onClose={() => setMode("chat")}
             onReviewed={async (d) => {
-              await apply(d.feedback);
+              await apply(d.feedback, t.topic);
               setMode("chat");
             }}
           />
         </div>
-      }
+      ))}
+      {threads.filter((t) => t.topic.key === key).length > 1 && (
+        <details>
+          <summary>Earlier conversation drafts</summary>
+          {threads
+            .filter((t) => t.topic.key === key)
+            .map((t, i) => (
+              <button
+                className="text-button"
+                key={t.id}
+                disabled={!ready}
+                onClick={() => {
+                  setActiveThread(t.id);
+                  setMode("voice");
+                }}
+              >
+                Conversation {i + 1} · {t.topic.label}
+              </button>
+            ))}
+          <p className="fine">
+            Older drafts stay on this page. A changed item must be reviewed
+            against its current revision before saving.
+          </p>
+        </details>
+      )}
+      {error && (
+        <p className="alert" role="alert">
+          {error}
+        </p>
+      )}
     </section>
   );
 }
 function PreferenceEditor({
   value,
   onSave,
+  enabled = true,
 }: {
   value: string;
   onSave: (v: string) => Promise<void>;
+  enabled?: boolean;
 }) {
   const [text, setText] = useState(value),
     [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    dirty = useRef(false);
+  useEffect(() => {
+    if (!dirty.current) setText(value);
+  }, [value]);
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        if (busy) return;
+        if (busy || !enabled) return;
         setBusy(true);
         try {
           await onSave(text);
+          dirty.current = false;
           setError("Saved.");
         } catch (e) {
           setError(errorText(e));
@@ -1279,15 +1611,21 @@ function PreferenceEditor({
       }}
     >
       <label>
-        Style wishes
+        Reviewed note
         <textarea
           maxLength={600}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            dirty.current = true;
+            setText(e.target.value);
+          }}
         />
       </label>
-      <button className="button outline" disabled={busy}>
-        Save preference
+      <button
+        className="button outline"
+        disabled={busy || !enabled || !text.trim()}
+      >
+        Save reviewed note
       </button>
       {error && <p role="status">{error}</p>}
     </form>

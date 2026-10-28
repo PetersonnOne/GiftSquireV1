@@ -69,3 +69,8 @@ A temporary QA account received only members.manage, audit.read and spaces.read 
 
 ### Strict PRD audit — 28 October
 Earlier broad current-PRD completion wording was too strong. Core flows pass, but GS-04 still needs look/decision-specific feedback and explicit reported post-purchase distinction; Partner Brief needs relationship/full-shortlist/render-revision details. Lipstick close-up presentation needs specification alignment and remaining-shade acceptance. Physical listening, independent production hosting and demo/submission remain. See docs/PRD_COMPLETION_AUDIT.md. Existing28tests do not prove these unimplemented details.
+
+
+## 28 October local feature completion
+
+Scoped feedback, explicit purchase reports, private saved-choice notes, full Partner Brief snapshots and three actual lipstick shades are implemented. 39 tests and six new Chromium checks pass. Real scoped Chat and retained-context AI review save only the target outfit. Fresh GPT Live attempts negotiated sessions but did not reach ready audio; that acceptance issue remains open. GitHub remote timed out; no push succeeded. Vercel remains deferred by the user. See [the complete evidence record](docs/LOCAL_COMPLETION_2026-10-28.md), which supersedes older pending-feature entries above.

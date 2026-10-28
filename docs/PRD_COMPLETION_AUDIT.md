@@ -1,21 +1,16 @@
-# PRD completion audit — 28 October 2026
+# Local PRD completion audit — 28 October 2026
 
-A strict comparison with PRD v0.2 supersedes earlier broad wording that development was complete for the entire PRD. The core release candidate is verified; the following items remain.
+This supersedes the earlier pending-feature list. First-release implementation is complete locally; evidence below separates backend tests, actual provider results and browser checks.
 
-## Product completion
+| PRD item | Implemented result | Verification |
+|---|---|---|
+| GS-04 scoped feedback | Chat/Discuss with AI target overall wishes, one candidate or private saved choice; explicit user-reported post-purchase stage | 39-test suite includes targeting, stale versions, purchase guard and decision-note privacy; real browser planning/report saves |
+| GS-05 Partner Brief | Relationship, full shortlist, source/preview/generated revisions and snapshot invalidation | Backend tests; real Chromium document and PDF export |
+| Lipstick presentation | Full outfit retained beside actual Rose/Berry/Coral close-ups; ready shades reused without quota/task | Three live YouCam outputs inspected; cached selection and mobile/gallery checks |
+| Core journeys | Self shopping, both gift paths, consent/privacy, recipient approvals, private choice, authentication, administration, briefs/email, both setup modes | Earlier destination acceptance retained in VERIFICATION.md |
 
-- GS-04: Chat/Discuss with AI currently save reviewed shopping-space style preferences. Finish targeting a specific candidate/look or saved decision, and distinguish ordinary planning feedback from explicitly user-reported post-purchase feedback. Do not infer a purchase.
-- GS-05 Partner Brief: add relationship, the full shortlist (including candidates outside the selected images), and explicit source/render revision details. Current private brief already includes selected actual images, wishes, budget, shade, approval status and final-choice marking.
+## Release boundary
 
-## Acceptance and specification alignment
+Vercel production deployment is deliberately deferred by the user. No deployment is authorized without a new explicit approval. GitHub origin is configured, but the machine could not connect to github.com:443 during the 28 October remote read. Local commits remain the source of truth until a push succeeds.
 
-- Optional lipstick currently uses a real YouCam close-up alongside the preserved full outfit. One shade is live-verified; the other two available shade settings need live acceptance. Clarify the PRD wording about a combined result to match the approved final presentation, rather than implying a single merged full-body image exists.
-- Complete physical microphone/speaker listening review. Both voice workflows have passed actual WebRTC/conversation/review tests using controlled audio input.
-- Independent GitHub/Vercel release, production Convex/auth/environment setup and hosted acceptance remain. Local admin owner setup is complete.
-- Rehearsal, final demo, submission story/artwork/package remain a separate later phase. No new demo is recorded.
-
-## Verified core
-
-Self shopping; both gifting paths; real clothing previews; consent/photo provenance; recipient approval and privacy/version guards; both setup/feedback modes; account verification/recovery; four themes; administration; actual-image/PDF exports; reviewed Resend delivery/recovery. Optimized build, TypeScript and28tests pass.
-
-Merchant integration, checkout/shipping, a marketplace and broad skincare/makeover functions are explicitly deferred by the PRD, not unfinished first-release obligations.
+Two fresh 28 October voice attempts negotiated sessions but did not become ready. Recovery and actual AI preparation from retained context passed. Fresh audio/captions and physical listening remain open acceptance checks. See LOCAL_COMPLETION_2026-10-28.md. Demo rehearsal/recording and the final submission package remain a later phase. Merchant checkout, shipping, a marketplace and broad skincare are explicitly deferred scope.

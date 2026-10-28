@@ -1,6 +1,6 @@
 # GiftSquire PRD
 
-Version 0.2 — updated 27 October 2026 with the approved shared-photo path and Partner/Gift Briefs. Requirements and implementation evidence are tracked separately.
+Version 0.3 — updated 28 October 2026: scoped feedback, explicit purchase reports, full Partner Brief snapshots and lipstick comparison presentation. Requirements and implementation evidence are tracked separately.
 
 ## 1. Product and audience
 
@@ -56,7 +56,7 @@ A lightweight colour-coded dashboard may show candidate count, completed/failed 
 
 ## 5. YouCam and orchestration
 
-The clothing preview must use a real eligible YouCam API. Optional lipstick must use the appropriate makeup VTO API; confirm that the chosen chaining method produces a reliable combined result. Do not add general Skin Analysis merely to increase API count.
+The clothing preview must use a real eligible YouCam API. Optional lipstick must use the appropriate makeup VTO API; chain the completed outfit into a lipstick close-up, displayed alongside the preserved full outfit. Compare Rose, Berry and Coral as labelled actual outputs. Reuse ready shade results for the same source/outfit without a new paid task; a changed source invalidates them. Do not imply a single merged full-body image. Do not add general Skin Analysis merely to increase API count.
 
 The application coordinates upload, task creation, polling, timeout, retry and storage. Provider keys remain server-only. An LLM can interpret reviewed requests and guide conversation; it does not fabricate previews, approve for a recipient or bypass catalog/ownership policy.
 
@@ -125,3 +125,11 @@ This PRD authorises planning and the requested foundation adaptation; it does no
 ## 11. What's next
 
 After the first complete release, consider broader catalog/category coverage, richer occasion support, optional merchant integration and improved usage reporting. Keep the first build centred on self-shopping and gifting decisions; defer checkout, shipping, a marketplace, broad skincare routines and a full makeover suite.
+
+## 12. Local completion and release boundary — 28 October
+
+Chat and Discuss with AI target overall wishes, a named candidate or the owner’s private saved choice. Planning and explicitly user-reported post-purchase notes remain separate. Saving a note does not change images or approvals. Private decision notes never enter recipient history or AI context.
+
+Partner Brief snapshots include relationship, the complete candidate shortlist and source/preview/generated revision details even when only one image is included. Any candidate change invalidates the private snapshot. Gift Briefs omit this private metadata.
+
+Complete and verify the local app first. The intended GitHub repository is https://github.com/PetersonnOne/GiftSquireV1. Creating or triggering Vercel production deployment requires the user’s new explicit approval. Demo recording remains a separate phase.

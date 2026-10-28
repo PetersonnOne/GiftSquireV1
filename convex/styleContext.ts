@@ -1,15 +1,8 @@
 import { v } from "convex/values";
 import { internalQuery } from "./_generated/server";
-import { access } from "./spaces";
+import { discussionArgs, discussionContext } from "./model/discussion";
 export const read = internalQuery({
-  args: { spaceId: v.id("spaces") },
-  handler: async (ctx, { spaceId }) => {
-    const { space } = await access(ctx, spaceId);
-    return {
-      title: space.title,
-      journey: space.journey,
-      occasion: space.occasion,
-      preferences: space.preferences,
-    };
-  },
+  args: { spaceId: v.id("spaces"), ...discussionArgs },
+  handler: async (ctx, { spaceId, ...topic }) =>
+    discussionContext(ctx, spaceId, topic),
 });

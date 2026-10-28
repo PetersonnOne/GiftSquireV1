@@ -30,7 +30,30 @@ async function resolve(ctx: QueryCtx | MutationCtx, id: Id<"briefs">) {
         .map((n) => n.toString(16).padStart(2, "0"))
         .join("")
     : null;
+  const shortlist =
+    brief.kind === "partner"
+      ? await ctx.db
+          .query("looks")
+          .withIndex("by_space", (q) => q.eq("spaceId", space._id))
+          .collect()
+      : [];
+  const snapshot = brief.partnerSnapshot;
+  const partnerChanged =
+    (brief.kind === "partner" && !snapshot) ||
+    (!!snapshot &&
+      (snapshot.selectedId !== space.selectionId ||
+        snapshot.shortlist.length !== shortlist.length ||
+        snapshot.shortlist.some((item) => {
+          const l = shortlist.find((l) => l._id === item.id);
+          return (
+            !l ||
+            l.version !== item.version ||
+            (l.feedbackVersion ?? 1) !== item.feedbackVersion ||
+            validApproval(l, space.version) !== item.approved
+          );
+        })));
   const stale =
+    partnerChanged ||
     (!!tokenHash &&
       (tokenHash !== space.inviteHash ||
         (space.inviteExpiresAt ?? 0) < Date.now())) ||
@@ -161,7 +184,38 @@ export const create = mutation({
       throw new ConvexError(
         "This space already has 30 briefs. Start a new space for a fresh collection.",
       );
+    const shortlist =
+      args.kind === "partner"
+        ? await ctx.db
+            .query("looks")
+            .withIndex("by_space", (q) => q.eq("spaceId", space._id))
+            .collect()
+        : [];
+    const snapshot =
+      args.kind === "partner"
+        ? {
+            relationship: space.relationship,
+            preferences: space.preferences,
+            currency: space.currency,
+            budget: space.budget,
+            sourceVersion: space.version,
+            selectedId: space.selectionId,
+            shortlist: shortlist.map((l) => ({
+              id: l._id,
+              name:
+                PRODUCTS.find((p) => p.id === l.productId)?.name ?? "Outfit",
+              version: l.version,
+              renderVersion: l.renderVersion ?? l.version,
+              sourceVersion: l.sourceVersion,
+              status: l.status,
+              shade: l.lipstick,
+              approved: validApproval(l, space.version),
+              feedbackVersion: l.feedbackVersion ?? 1,
+            })),
+          }
+        : undefined;
     return ctx.db.insert("briefs", {
+      partnerSnapshot: snapshot,
       spaceId: args.spaceId,
       ownerId: user._id,
       kind: args.kind,
@@ -199,8 +253,22 @@ export const get = query({
       stale,
       title: s.title,
       occasion: s.occasion,
-      preferences: b.kind === "partner" ? s.preferences : null,
-      budget: b.kind === "partner" ? (s.budget ?? null) : null,
+      relationship:
+        b.kind === "partner"
+          ? (b.partnerSnapshot?.relationship ?? s.relationship)
+          : null,
+      sourceRevision: b.sourceVersion,
+      createdAt: b._creationTime,
+      shortlist:
+        b.kind === "partner" ? (b.partnerSnapshot?.shortlist ?? []) : [],
+      preferences:
+        b.kind === "partner"
+          ? (b.partnerSnapshot?.preferences ?? s.preferences)
+          : null,
+      budget:
+        b.kind === "partner"
+          ? (b.partnerSnapshot?.budget ?? s.budget ?? null)
+          : null,
       currency: s.currency,
       selectedId: b.kind === "partner" ? (s.selectionId ?? null) : null,
       reviewPath:
@@ -218,6 +286,8 @@ export const get = query({
                 PRODUCTS.find((p) => p.id === l!.productId)?.name ?? "Outfit",
               approved: validApproval(l!, s.version),
               shade: l!.lipstick ?? null,
+              renderRevision: l!.renderVersion ?? l!.version,
+              sourceRevision: l!.sourceVersion,
               detailUrl: l!.detailId
                 ? await ctx.storage.getUrl(l!.detailId)
                 : null,

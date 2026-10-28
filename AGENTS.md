@@ -23,3 +23,6 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Current release boundary
+Finish all local PRD features and local acceptance first. Intended remote: https://github.com/PetersonnOne/GiftSquireV1 . Do not create or trigger a Vercel production deployment without a new explicit user approval.
