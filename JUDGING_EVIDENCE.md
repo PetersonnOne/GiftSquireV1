@@ -1,5 +1,9 @@
 # GiftSquire judging evidence plan
 
+## Visual polish — 28 October 2026
+
+The four-theme interface now uses selective glass surfaces, soft lighting and gentle pointer feedback. Reduced motion removes movement, high-contrast preferences use opaque surfaces, and mobile cards avoid layered blur. Local optimized-build browser checks passed; appearance screenshots are under ignored `output/playwright/glass-*`. These checks cover the specific interaction and layout details described here. Presentation footage remains a separate task.
+
 ## Hosted evidence — 28 October 2026
 
 The live app, real production YouCam results, recipient approval, actual-image briefs, delivered Gift Brief and both hosted voice handoffs are now demonstrated. Production owner setup and privacy/access checks passed. See [hosted verification](docs/HOSTED_VERIFICATION.md) for the exact evidence, including Interactive Mode's successful explicit retry after a startup timeout. This supersedes prior deployment-deferral entries. Demo recording has not started.

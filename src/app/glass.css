@@ -1,0 +1,245 @@
+/* Shared finish: static light, selective frosted surfaces, brief interaction cues. */
+:root {
+  --ambient-rose: #bd789e16;
+  --ambient-gold: #c39a6612;
+  --glass-sheen: #ffffffa3;
+  --glass-shadow: #4423440c;
+  --glass-edge: color-mix(in srgb, var(--line) 82%, var(--accent));
+  --glass-fill: color-mix(in srgb, var(--surface) 88%, transparent);
+  --glass-glow: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+html[data-theme="midnight"] {
+  --ambient-rose: #ba83bf24;
+  --ambient-gold: #d4a66612;
+  --glass-sheen: #f8e7f015;
+  --glass-shadow: #09060f36;
+}
+html[data-theme="dark"] {
+  --ambient-rose: #ffffff09;
+  --ambient-gold: #ffffff04;
+  --glass-sheen: #ffffff13;
+  --glass-shadow: #0000004d;
+  --glass-glow: #ffffff0d;
+}
+html[data-theme="white"] {
+  --ambient-rose: #79677c0b;
+  --ambient-gold: #c39a660b;
+  --glass-shadow: #24303d0a;
+  --glass-glow: #24303d0d;
+}
+body {
+  background-image:
+    radial-gradient(
+      ellipse 780px 540px at 5% 0,
+      var(--ambient-rose),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 760px 600px at 100% 180px,
+      var(--ambient-gold),
+      transparent 75%
+    );
+  background-repeat: no-repeat;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+.header {
+  position: relative;
+  z-index: 5;
+  border-bottom-color: var(--glass-edge);
+  box-shadow:
+    0 8px 30px var(--glass-shadow),
+    inset 0 1px var(--glass-sheen);
+}
+.header nav a {
+  transition:
+    color 160ms ease,
+    border-color 160ms ease;
+}
+.panel,
+.gs-feature-grid article,
+.gs-look,
+.gs-product {
+  box-shadow:
+    0 12px 32px var(--glass-shadow),
+    inset 0 1px var(--glass-sheen);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+.gs-feature-grid article,
+.gs-mode-panel,
+.gs-stats,
+.gs-discussion,
+.gs-soft-card {
+  border-color: var(--glass-edge);
+  background-image: linear-gradient(
+    140deg,
+    var(--glass-sheen),
+    transparent 35%
+  );
+}
+.gs-note {
+  border-color: var(--glass-edge);
+  box-shadow:
+    0 18px 50px var(--glass-shadow),
+    inset 0 1px var(--glass-sheen);
+}
+@supports (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .header {
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    backdrop-filter: blur(16px) saturate(120%);
+  }
+  .gs-feature-grid article,
+  .gs-mode-panel,
+  .gs-stats,
+  .gs-discussion,
+  .gs-soft-card,
+  .gs-note {
+    background-color: var(--glass-fill);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+.gs-stat {
+  border-top: 1px solid var(--glass-sheen);
+  box-shadow: inset 0 1px 12px var(--glass-shadow);
+}
+.gs-mode-bubble,
+.gs-decision {
+  box-shadow:
+    inset 0 1px var(--glass-sheen),
+    0 8px 22px var(--glass-shadow);
+}
+.gs-look.selected,
+.gs-product.chosen {
+  box-shadow:
+    0 0 0 1px var(--warm),
+    0 8px 30px var(--glass-glow);
+}
+.button,
+.gs-space-tabs button,
+.gs-mode-tabs button,
+.gs-shades button {
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+.button:not(.outline) {
+  box-shadow:
+    inset 0 1px var(--glass-sheen),
+    0 4px 14px var(--glass-shadow);
+}
+.gs-product:focus-within {
+  outline: 3px solid var(--warm);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .header nav a:hover {
+    color: var(--warm);
+    border-color: var(--warm);
+  }
+  .gs-feature-grid article:hover,
+  .gs-look:hover,
+  .gs-product:hover {
+    border-color: var(--accent);
+    box-shadow:
+      0 14px 38px var(--glass-shadow),
+      0 0 24px var(--glass-glow),
+      inset 0 1px var(--glass-sheen);
+  }
+  .gs-look.selected:hover,
+  .gs-product.chosen:hover {
+    border-color: var(--warm);
+  }
+  .button:not(:disabled):hover,
+  .gs-space-tabs button:not(:disabled):hover,
+  .gs-mode-tabs button:not(:disabled):hover,
+  .gs-shades button:not(:disabled):hover {
+    box-shadow:
+      0 7px 22px var(--glass-glow),
+      inset 0 1px var(--glass-sheen);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .gs-product:hover,
+  .gs-look:hover {
+    transform: translateY(-3px);
+  }
+  .button:not(:disabled):hover,
+  .gs-space-tabs button:not(:disabled):hover,
+  .gs-mode-tabs button:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+  .button:not(:disabled):active,
+  .gs-space-tabs button:not(:disabled):active,
+  .gs-mode-tabs button:not(:disabled):active {
+    transform: translateY(0);
+  }
+}
+@media (max-width: 800px) {
+  .gs-feature-grid article,
+  .gs-mode-panel,
+  .gs-stats,
+  .gs-discussion,
+  .gs-soft-card,
+  .gs-note {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: var(--surface);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .button:hover,
+  .gs-product:hover,
+  .gs-look:hover,
+  .gs-space-tabs button:hover,
+  .gs-mode-tabs button:hover {
+    transform: none !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce),
+  (prefers-contrast: more),
+  (forced-colors: active) {
+  .header,
+  .gs-feature-grid article,
+  .gs-mode-panel,
+  .gs-stats,
+  .gs-discussion,
+  .gs-soft-card,
+  .gs-note {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--surface);
+  }
+}
+@media print {
+  body {
+    background: white;
+  }
+  .panel,
+  .gs-look,
+  .gs-product,
+  .gs-feature-grid article {
+    background: white;
+    box-shadow: none;
+    transform: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

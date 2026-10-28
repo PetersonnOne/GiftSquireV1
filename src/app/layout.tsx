@@ -4,6 +4,7 @@ import { Providers } from "@/components/providers";
 import { Header } from "@/components/header";
 import { BrandLogo } from "@/components/brand-logo";
 import "./globals.css";
+import "./glass.css";
 export const metadata: Metadata = {
   title: {
     default: "GiftSquire — Choose with confidence. Give with thought.",

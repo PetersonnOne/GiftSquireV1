@@ -14,7 +14,7 @@ A clothing gift should feel like *them*. GiftSquire helps thoughtful gift-givers
 - **Your pace, your way:** User Mode and Interactive Mode for setup; Chat and Discuss with AI for overall wishes, an individual outfit or a private saved choice, with separate planning and user-reported post-purchase notes.
 - **Thoughtful briefs:** a private Partner Brief with relationship, the complete shortlist and image revisions for planning and a recipient Gift Brief using actual generated images, with print/PDF, image downloads and explicit reviewed Resend delivery.
 - **Privacy in the workflow:** photo provenance, controlled preview sharing, revocable invitations and approval checks tied to current image revisions.
-- **A welcoming studio:** numbered steps, live colour-coded stats, four appearances and email verification/password recovery.
+- **A welcoming studio:** numbered steps, live colour-coded stats and four appearances, with soft glass surfaces and gentle hover feedback that respects reduced motion. Email verification and password recovery are built in.
 
 YouCam creates the visual previews. GiftSquire coordinates the private shopping space, invitations, reviews and approvals. The AI Style Guide helps express wishes; it cannot invent preview results, approve for a recipient or make a purchase.
 

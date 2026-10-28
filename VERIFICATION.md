@@ -1,5 +1,11 @@
 # GiftSquire verification
 
+## Appearance polish — 28 October 2026
+
+Added a CSS-only finish across all four themes: ambient rose/gold or neutral light, selective frosted navigation/cards, inset highlights, restrained card/button hover movement and selected-outfit emphasis. Forms and photographs keep their existing rendering. No voice, provider, approval, account or data logic changed.
+
+The optimized build and TypeScript passed. Seven browser checks passed on the optimized local build: four desktop themes without overflow; button hover; studio card hover and keyboard focus; reduced-motion movement/transition removal; forced-colour opaque fallback; four touch/mobile themes with unblurred card surfaces; mobile studio layout. Midnight/White homepage, studio and mobile screenshots were visually inspected. Print rules remove decorative glass/shadows. Evidence: `.private/glass-acceptance.json` and `output/playwright/glass-*`; harness: `scripts/qa-glass-appearance.mjs`. No paid provider calls were required. Hosted smoke evidence is recorded separately after the Git-triggered deployment.
+
 ## Latest: hosted release accepted — 28 October 2026
 
 GiftSquire is live at https://giftsquire-v1.vercel.app through GitHub main and Vercel, with independent Convex production. Hosted accounts/recovery, actual YouCam outputs, recipient approval/final choice, Partner Brief/PDF, delivered Gift Brief and both voice handoffs passed. Owner verification, superadmin provisioning, private-photo guards and public bundle scan passed. Interactive voice needed one explicit retry; physical listening is not claimed. See [hosted evidence](docs/HOSTED_VERIFICATION.md). This supersedes older deferred-deployment entries below.

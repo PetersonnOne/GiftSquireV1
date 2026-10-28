@@ -1,5 +1,9 @@
 # GiftSquire continuation
 
+## Latest appearance update — 28 October 2026
+
+CSS-only glass/hover polish is implemented in src/app/glass.css, imported after the existing global styles. The optimized build, TypeScript and seven browser appearance checks passed. All four themes, desktop/touch layouts, reduced motion and forced-colour fallback were checked. No feature, provider, account or voice logic changed. This update deploys normally through GitHub main; inspect the latest private deployment metadata and glass hosted-smoke evidence before reporting the release. No demo generation or recording started.
+
 ## Current state after restart recovery — 28 October 2026
 
 Production deployment and hosted acceptance completed before the laptop crash. Live: https://giftsquire-v1.vercel.app . GitHub main is connected to Vercel project giftsquire-v1; Convex production is tame-meerkat-333 and development remains striped-viper-361. CareTable is untouched.
