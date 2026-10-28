@@ -57,3 +57,11 @@ Interrupted-send UI was tested with a simulated sending-state websocket response
 Existing GPT Live sessions were confirmed closed. Refined discussion preparation was verified on existing saved context, avoiding a new paid voice session. Public static bundles/repository candidates (126 files at scan) and the original reference DOCX contained no configured provider secret. Ignore coverage for environments, QA state, archives, retrospective and submission folders was verified. A separate local Git repository was initialized; no remote/public GiftSquire hosting was configured by this verification task.
 
 Current stage: locally verified release candidate for owner review. Pending: user's own verified admin account, physical audio review and independent GitHub/Vercel/production-backend hosted acceptance. CareTable was untouched. CONTINUATION.md records the next actions.
+
+
+### Owner and keyboard verification - 28 October
+The user confirmed their new GiftSquire account was verified. Operator inspection confirmed a unique matching verified account; the operator-only bootstrap assigned superadmin. The role persisted and the protected operations API accepted the owner identity. No password was read or changed. Keyboard testing confirmed the first skip link and keyboard-operated theme selection. The separate local release commit is b215619; hosting remains an independent next step.
+
+
+### Administration browser acceptance
+A temporary QA account received only members.manage, audit.read and spaces.read through the owner's protected operator call. Real Chromium login verified the scoped operations overview, People & Access and Audit Trail screens. The temporary role was revoked afterward and the designated owner's superadmin grant was retained. Private evidence: .private/admin-browser-acceptance.json and output/playwright/admin-staff-acceptance.png. A Windows CLI teardown assertion was handled by verifying persisted state before any retry; one initial locator omitted the decorative arrow and was corrected. These were test-harness issues; no QA account remains an administrator.

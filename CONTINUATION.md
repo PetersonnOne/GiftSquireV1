@@ -18,7 +18,7 @@ VERIFICATION.md is the detailed chronology. Private records: .private/browser-ac
 
 ## Remaining external release work
 
-1. The user was asked to create/verify their own GiftSquire account using petersonnsdev@gmail.com at the local site. Await their reply, then identify that verified account and assign admin using the operator-only bootstrap. Never make a disposable QA account permanent owner. No account/role IDs are copied from CareTable.
+1. The user confirmed their own GiftSquire account verified on28October. The matching verified account was assigned superadmin through the operator-only bootstrap; persistence and access to the protected operations API passed. No disposable QA account is permanent owner and no source account/role IDs were copied. Owner review can proceed at /admin. Real Chromium checks of scoped admin overview, People & Access and Audit Trail passed using a temporary QA role, which was revoked afterward.
 2. Review the app together, including real microphone/speaker experience. Keep review feedback distinct from QA automation evidence.
 3. Create/link an independent GitHub repository and Vercel project when moving to hosting. Current local Git branch is codex/build-giftsquire; no remote is configured. Do not reuse CareTable linkage or change GeneaOne DNS. Use GitHub-triggered Vercel deployments as requested for the shared foundation.
 4. Provision/configure GiftSquire production Convex/auth/provider variables, SITE_URL and independent production owner signup when deploying; dev data/account IDs are not automatically production identities. Test hosted auth, media, Resend links and voice before public sign-off.
