@@ -1,13 +1,18 @@
 # GiftSquire continuation
 
-Updated 28 October 2026. Remaining first-release PRD implementation is complete locally. Read docs/LOCAL_COMPLETION_2026-10-28.md for exact evidence and next work. App: http://localhost:4327. CareTable remains untouched.
+Updated 28 October 2026. The user explicitly approved production deployment. Earlier instructions to defer Vercel are superseded.
 
-Fresh GPT Live audio did not become ready in two Chromium attempts today; do not claim that issue resolved. Retained-context review and scoped save pass. Prior controlled voice successes remain historical. Inspect network/WebRTC evidence before more paid retries. QA voice sessions were closed.
+## Release in progress
 
-Vercel production deployment requires new explicit user approval. Do not create, link or deploy it now. GitHub origin is configured; remote access timed out and no push succeeded. Confirm no automatic production integration before pushing. Demo recording is a separate later phase.
+- Code pushed to https://github.com/PetersonnOne/GiftSquireV1 on main; initial release configuration commit b0055a5.
+- Independent Vercel project giftsquire-v1 in Joseph's projects is linked to that repository. Production environment has the secret Convex deployment key and public backend URLs.
+- Convex production tame-meerkat-333 is deployed with independent signing keys, provider settings and the intended hosted SITE_URL. Development remains striped-viper-361 and localhost:4327.
+- vercel.json deploys Convex and builds Next.js together. Final hosted build and assigned URL still need acceptance.
 
-Use only the separate GiftSquire dev backend striped-viper-361. The verified owner is superadmin; temporary QA roles were revoked. Keep .private, output/playwright, archives, retrospective-catalog and submission folders ignored.
+## Next checks
 
-Latest diagnosis: fresh retry negotiated a session but ICE stayed checking, DTLS new and zero transport bytes; no audio/events. OpenAI status reports operational. Actual deployed key matched local and completed a small Responses request. User reports $33.39 credit balance. Test another internet path before more repeated voice starts. See latest VERIFICATION.md entry.
+Inspect the Git-triggered Vercel build, verify actual hostname/SITE_URL, and test hosted accounts, private access, shopping, AI and voice. Production is a clean database: do not import local QA accounts or private artifacts. The designated owner must create/verify their own production account before operator-only admin bootstrap for the matching verified identity.
 
-Recovery retest: both modes connected and played decoded audio. Interactive Mode completed review and confirmation. Discuss with AI prepared a review; its test locator was corrected, but a later new start timed out again. Fresh startup remains intermittent, not permanently resolved. Preserve explicit retries and investigate connection evidence before more starts. See latest VERIFICATION.md entry.
+39 automated tests pass. Latest local voice evidence: both modes connected and played decoded audio; Interactive review/confirmation passed. A later discussion startup timed out again, so fresh connection reliability remains intermittent. Do not claim permanent transport resolution; use bounded explicit retries.
+
+CareTable remains untouched. Keep credentials, browser sessions, render evidence, retrospective and submission folders ignored. Demo recording remains a separate phase. See docs/PRODUCTION_DEPLOYMENT.md and VERIFICATION.md for exact release evidence.
