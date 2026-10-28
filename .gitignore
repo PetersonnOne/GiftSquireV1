@@ -1,0 +1,20 @@
+node_modules/
+.next/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+.private/
+.vercel/
+.convex/
+*.tsbuildinfo
+*.log
+test-results/
+output/playwright/
+/Submission Video Workspace/
+/Submit Projects/
+/retrospective-catalog/
+/archive/
+
+.playwright-cli/

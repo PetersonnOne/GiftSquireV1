@@ -1,0 +1,62 @@
+{
+  "checked": "2026-10-27",
+  "status": "research only",
+  "sources": [
+    {
+      "title": "Current event",
+      "url": "https://youcam-api-skin-ai-ecommerce.devpost.com/"
+    },
+    {
+      "title": "Current official rules",
+      "url": "https://youcam-api-skin-ai-ecommerce.devpost.com/rules"
+    },
+    {
+      "title": "Current unpublished gallery",
+      "url": "https://youcam-api-skin-ai-ecommerce.devpost.com/project-gallery"
+    },
+    {
+      "title": "Previous winner gallery",
+      "url": "https://youcam-api.devpost.com/project-gallery"
+    },
+    {
+      "title": "Organiser recap",
+      "url": "https://www.perfectcorp.com/business/news/YouCam-API-Hackthon-eCommerce"
+    },
+    {
+      "title": "Aloud",
+      "url": "https://devpost.com/software/aloud-lxqr70"
+    },
+    {
+      "title": "ShadeSpan",
+      "url": "https://devpost.com/software/shadespan"
+    },
+    {
+      "title": "CASTING",
+      "url": "https://devpost.com/software/casting"
+    },
+    {
+      "title": "KeepMe",
+      "url": "https://devpost.com/software/keepme"
+    },
+    {
+      "title": "ConfidFit",
+      "url": "https://devpost.com/software/confidfit"
+    },
+    {
+      "title": "DeveloperWeek separate event",
+      "url": "https://www.perfectcorp.com/business/blog/general/perfect-corp-hackathon"
+    },
+    {
+      "title": "Facial colour tones",
+      "url": "https://docs.perfectcorp.com/reference/ai_skin_tone_analysis"
+    },
+    {
+      "title": "Makeup VTO",
+      "url": "https://yce.perfectcorp.com/ai-api/products/virtual-makeup-try-on-api"
+    },
+    {
+      "title": "Clothes V4",
+      "url": "https://www.perfectcorp.com/business/blog/ai-clothes/ai-clothes-try-on-api-v4-outerwear"
+    }
+  ]
+}
