@@ -77,6 +77,20 @@ try {
   );
   report.captionGreeting = true;
   report.targetedVoice = true;
+  await p.waitForFunction(
+    () => {
+      const audio = document.querySelector(".gs-discussion audio");
+      return (
+        audio &&
+        audio.readyState >= 2 &&
+        audio.currentTime > 0.05 &&
+        !audio.paused
+      );
+    },
+    null,
+    { timeout: 15000 },
+  );
+  report.audioPlayback = true;
   await d
     .getByLabel("Extra notes for the review", { exact: true })
     .fill(
@@ -85,7 +99,7 @@ try {
   await d
     .getByRole("button", { name: "Stop voice & prepare review", exact: true })
     .click();
-  await d.getByLabel("Preference to save", { exact: true }).waitFor();
+  await d.getByLabel("Preference to save", { exact: false }).waitFor();
   const confirm = d.getByRole("button", {
     name: "Confirm & save preference",
     exact: true,
@@ -113,6 +127,10 @@ try {
     "PASS: real scoped Chat proposal and real GPT Live greeting, review, confirmation and targeted save; overall wishes unchanged.",
   );
 } catch (e) {
+  await writeFile(
+    ".private/scoped-ai-latest-attempt.json",
+    JSON.stringify(report, null, 2),
+  );
   await p.screenshot({
     path: "output/playwright/scoped-ai-failure.png",
     fullPage: true,

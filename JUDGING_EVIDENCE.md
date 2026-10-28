@@ -87,3 +87,14 @@ The deployed GiftSquire OpenAI credential was compared privately with the local 
 Both browser-control runtimes failed initialization, preventing direct inspection of the authenticated billing page. Playwright browser diagnostics worked. Suggested next discrimination test: retry the same local app over a different internet connection, such as a mobile hotspot. No system security/privacy settings were changed, no automatic paid retry loop ran, and no Vercel deployment was performed.
 
 Private evidence: .private/voice-retry-diagnostic.json, .private/openai-credit-check.json, output/playwright/voice-retry-diagnostic.png. Diagnostic script: scripts/qa-voice-diagnostic.mjs. Fresh voice readiness remains unresolved.
+
+
+## 28 October — connectivity recovery retest
+
+After the user reported internet recovery, a fresh Discuss with AI diagnostic reached ICE connected, DTLS connected, an open data channel and session.started, with greeting captions and nonzero received transport bytes. A subsequent scoped discussion confirmed decoded audio playback and prepared the human review; its automated save check stopped on an overly strict textarea-label locator. The locator was corrected.
+
+Interactive Mode separately passed fresh greeting/captions, decoded audio playback, actual AI review preparation and confirmed setup handoff to User Mode. It used a QA account and controlled microphone device plus written review notes; no new shopping space, image render or email was created.
+
+A later fresh Discuss with AI attempt hit the startup timeout again. Therefore startup is intermittent: the earlier total failure no longer reproduces consistently, but reliable fresh connection acceptance is still open. Do not claim every retry succeeds or that the network fault is definitively fixed. No production code, quota or security setting was changed.
+
+Evidence: .private/voice-retry-diagnostic.json (successful connection), .private/interactive-connectivity-success.json, .private/scoped-ai-latest-attempt.json (later unsuccessful attempt), output/playwright/interactive-connectivity-success.png. Scripts: qa-voice-diagnostic.mjs, qa-interactive-connectivity.mjs and qa-scoped-ai.mjs. Browser audio playback is confirmed; physical speaker/microphone listening remains an owner check.

@@ -14,3 +14,5 @@ This supersedes the earlier pending-feature list. First-release implementation i
 Vercel production deployment is deliberately deferred by the user. No deployment is authorized without a new explicit approval. GitHub origin is configured, but the machine could not connect to github.com:443 during the 28 October remote read. Local commits remain the source of truth until a push succeeds.
 
 Two fresh 28 October voice attempts negotiated sessions but did not become ready. Recovery and actual AI preparation from retained context passed. Fresh audio/captions and physical listening remain open acceptance checks. See LOCAL_COMPLETION_2026-10-28.md. Demo rehearsal/recording and the final submission package remain a later phase. Merchant checkout, shipping, a marketplace and broad skincare are explicitly deferred scope.
+
+Recovery update: successful fresh connections/audio now exist for both modes, and Interactive review/confirmation passed. A later discussion start still timed out; reliable startup acceptance remains open. See VERIFICATION.md for precise results.
