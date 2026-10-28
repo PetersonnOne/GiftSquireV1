@@ -74,3 +74,16 @@ Earlier broad current-PRD completion wording was too strong. Core flows pass, bu
 ## 28 October local feature completion
 
 Scoped feedback, explicit purchase reports, private saved-choice notes, full Partner Brief snapshots and three actual lipstick shades are implemented. 39 tests and six new Chromium checks pass. Real scoped Chat and retained-context AI review save only the target outfit. Fresh GPT Live attempts negotiated sessions but did not reach ready audio; that acceptance issue remains open. GitHub remote timed out; no push succeeded. Vercel remains deferred by the user. See [the complete evidence record](docs/LOCAL_COMPLETION_2026-10-28.md), which supersedes older pending-feature entries above.
+
+
+## 28 October — voice retry and credit diagnosis
+
+OpenAI’s official status page reported all systems operational at the check: https://status.openai.com/ . No active Live outage was shown. Aggregate status does not exclude an individual connection fault.
+
+A fresh Chromium Discuss with AI session was accepted and its remote answer applied. ICE remained checking; candidate pairs were waiting/not nominated, DTLS stayed new, zero transport bytes were exchanged and no event channel opened. The bounded startup timeout and recovery UI ran. This localizes the observed failure before conversation/audio readiness; it does not establish whether the cause is routing, filtering, browser compatibility or the provider’s media transport.
+
+The deployed GiftSquire OpenAI credential was compared privately with the local credential and matched. A minimal gpt-6-luna Responses request returned HTTP200/completed with usage and no billing error. No credential, SDP or network address was printed. The user independently reported $33.39 remaining in the OpenAI billing dashboard. This is user-confirmed balance, not a balance returned by the project API key.
+
+Both browser-control runtimes failed initialization, preventing direct inspection of the authenticated billing page. Playwright browser diagnostics worked. Suggested next discrimination test: retry the same local app over a different internet connection, such as a mobile hotspot. No system security/privacy settings were changed, no automatic paid retry loop ran, and no Vercel deployment was performed.
+
+Private evidence: .private/voice-retry-diagnostic.json, .private/openai-credit-check.json, output/playwright/voice-retry-diagnostic.png. Diagnostic script: scripts/qa-voice-diagnostic.mjs. Fresh voice readiness remains unresolved.

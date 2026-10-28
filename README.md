@@ -31,7 +31,7 @@ The studio runs at `http://localhost:4327`. `npm run convex:dev` updates the lin
 
 ## Verification
 
-The optimized Next.js build, TypeScript checks and 39 automated tests pass. Chromium checks cover account recovery, mobile themes, shopping/approval, actual-image/PDF exports and reviewed email delivery. Both voice modes have completed real GPT Live handoffs in controlled QA. [Detailed evidence](VERIFICATION.md) records each run.
+The optimized Next.js build, TypeScript checks and 39 automated tests pass. Chromium checks cover account recovery, mobile themes, shopping/approval, actual-image/PDF exports and reviewed email delivery. Both voice modes completed real GPT Live handoffs in controlled QA on 27 October. [Detailed evidence](VERIFICATION.md) records each run.
 
 ## Explore the project
 
