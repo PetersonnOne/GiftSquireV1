@@ -1,6 +1,6 @@
 # GiftSquire continuation
 
-Updated 28 October 2026. Development and local release verification completed for the current PRD. The app is ready for owner review at http://localhost:4327, running the optimized Next.js build. CareTable remains untouched.
+Updated 28 October 2026. Core development and local release verification completed; a strict PRD audit identifies remaining feature details in docs/PRD_COMPLETION_AUDIT.md. The app is ready for owner review at http://localhost:4327, running the optimized Next.js build. CareTable remains untouched.
 
 ## Confirmed state
 
@@ -16,7 +16,9 @@ Updated 28 October 2026. Development and local release verification completed fo
 
 VERIFICATION.md is the detailed chronology. Private records: .private/browser-acceptance.json (six core checks), .private/release-browser-acceptance.json (auth and theme checks; initial harness navigation abort recorded), .private/layout-browser-acceptance.json (nine passing layout/recovery checks), .private/voice-prompt-regression.json. Browser screenshots and Partner Brief PDF are under ignored output/playwright. The navigation harness was changed to wait for saved theme and follow the visible navigation link; that route passed.
 
-## Remaining external release work
+## Remaining product and release work
+
+First finish the look-specific feedback/post-purchase distinction and complete Partner Brief metadata listed in docs/PRD_COMPLETION_AUDIT.md; then continue the release steps below.
 
 1. The user confirmed their own GiftSquire account verified on28October. The matching verified account was assigned superadmin through the operator-only bootstrap; persistence and access to the protected operations API passed. No disposable QA account is permanent owner and no source account/role IDs were copied. Owner review can proceed at /admin. Real Chromium checks of scoped admin overview, People & Access and Audit Trail passed using a temporary QA role, which was revoked afterward.
 2. Review the app together, including real microphone/speaker experience. Keep review feedback distinct from QA automation evidence.

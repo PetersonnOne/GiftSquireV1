@@ -65,3 +65,7 @@ The user confirmed their new GiftSquire account was verified. Operator inspectio
 
 ### Administration browser acceptance
 A temporary QA account received only members.manage, audit.read and spaces.read through the owner's protected operator call. Real Chromium login verified the scoped operations overview, People & Access and Audit Trail screens. The temporary role was revoked afterward and the designated owner's superadmin grant was retained. Private evidence: .private/admin-browser-acceptance.json and output/playwright/admin-staff-acceptance.png. A Windows CLI teardown assertion was handled by verifying persisted state before any retry; one initial locator omitted the decorative arrow and was corrected. These were test-harness issues; no QA account remains an administrator.
+
+
+### Strict PRD audit — 28 October
+Earlier broad current-PRD completion wording was too strong. Core flows pass, but GS-04 still needs look/decision-specific feedback and explicit reported post-purchase distinction; Partner Brief needs relationship/full-shortlist/render-revision details. Lipstick close-up presentation needs specification alignment and remaining-shade acceptance. Physical listening, independent production hosting and demo/submission remain. See docs/PRD_COMPLETION_AUDIT.md. Existing28tests do not prove these unimplemented details.

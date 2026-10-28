@@ -44,6 +44,6 @@ The optimized Next.js build, TypeScript checks and 28 automated tests pass. Chro
 
 ## What's next
 
-Connect independent GitHub/Vercel hosting, complete owner and hosted acceptance, then capture the walkthrough using verified application results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
+Complete look-specific feedback and Partner Brief detail, then connect independent GitHub/Vercel hosting, complete owner and hosted acceptance, then capture the walkthrough using verified application results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
 
 Clothing and optional lipstick previews powered by **YouCam · Perfect Corp.**
