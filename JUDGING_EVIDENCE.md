@@ -1,5 +1,9 @@
 # GiftSquire judging evidence plan
 
+## Clearer mode guidance — 29 October 2026
+
+Setup guidance has a more visible speech-bubble treatment linked to the selected mode. Catalogue framing preserves the full supplied YouCam image. Optimized local build and 16 Chromium mode/theme/viewport combinations passed. These are interface refinements, not new generation capabilities; original template head crops remain source-derived.
+
 ## Visual polish — 28 October 2026
 
 The four-theme interface now uses selective glass surfaces, soft lighting and gentle pointer feedback. Reduced motion removes movement, high-contrast preferences use opaque surfaces, and mobile cards avoid layered blur. Local optimized-build browser checks passed; appearance screenshots are under ignored `output/playwright/glass-*`. These checks cover the specific interaction and layout details described here. Presentation footage remains a separate task.

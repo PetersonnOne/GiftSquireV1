@@ -1,3 +1,31 @@
+/* Mode guidance stays visibly connected to the selected input button. */
+.gs-mode-tabs[aria-label="Setup mode"] { display: grid; grid-template-columns: 112px 156px; gap: 8px; max-width: 100%; }
+.gs-mode-bubble {
+  --bubble-fill: color-mix(in srgb, var(--surface) 86%, var(--accent));
+  background: var(--bubble-fill);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  margin-top: 24px;
+  padding: 22px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.gs-mode-bubble::before {
+  left: 186px; top: -13px; width: 20px; height: 20px;
+  border: 0; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent);
+  background: var(--bubble-fill); transform: rotate(45deg);
+}
+.gs-mode-bubble.is-manual::before { left: 44px; }
+.gs-mode-bubble > span {
+  display: grid; place-items: center; flex: 0 0 42px; height: 42px;
+  border-radius: 50%; background: var(--accent); color: var(--accent-text); font-size: 25px;
+}
+.gs-mode-bubble strong { color: var(--text); font-size: 16px; }
+.gs-mode-bubble p { color: var(--text); font-size: 14px; line-height: 1.65; }
+.gs-product img { height: 260px; object-fit: contain; object-position: center; background: #fff; }
+@media (max-width: 480px) {
+  .gs-mode-bubble { padding: 18px 14px; gap: 10px; }
+  .gs-mode-bubble > span { flex-basis: 32px; height: 32px; font-size: 21px; }
+}
 /* Shared finish: static light, selective frosted surfaces, brief interaction cues. */
 :root {
   --ambient-rose: #bd789e16;

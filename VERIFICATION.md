@@ -1,5 +1,9 @@
 # GiftSquire verification
 
+## Mode guidance and catalogue framing — 29 October 2026
+
+Stronger mode-bubble border, larger text, filled icon and active-button pointer implemented for User Mode and Interactive Mode. Catalogue images use contain instead of cover to preserve the complete supplied reference. Direct inspection of the original Beige Summer Set source confirms its upper head is already cropped; this change does not invent missing facial content. Optimized production build/TypeScript passed. Chromium passed 16 combinations of mode, theme and desktop/mobile viewport: 2px bubble border, pointer beneath the active button, contain framing and no horizontal overflow. Mode and catalogue screenshots were visually inspected. Private evidence: `.private/correction-acceptance.json`; screenshots: `output/playwright/correction-*`. No voice or paid generation calls were made.
+
 ## Appearance polish — 28 October 2026
 
 Added a CSS-only finish across all four themes: ambient rose/gold or neutral light, selective frosted navigation/cards, inset highlights, restrained card/button hover movement and selected-outfit emphasis. Forms and photographs keep their existing rendering. No voice, provider, approval, account or data logic changed.

@@ -12,6 +12,7 @@ A clothing gift should feel like *them*. GiftSquire helps thoughtful gift-givers
 - **Real YouCam clothing previews:** compare styles using the actual reference outfit and consented photo. Compare Rose, Berry and Coral lipstick close-ups alongside the full outfit; selecting an existing shade reuses the saved result.
 - **Recipient-led approval:** a giver-created preview is a proposal. Only the recipient approves a gift; the final pick must use a current approved look.
 - **Your pace, your way:** User Mode and Interactive Mode for setup; Chat and Discuss with AI for overall wishes, an individual outfit or a private saved choice, with separate planning and user-reported post-purchase notes.
+- **Clear visual guidance:** highlighted speech bubbles point to the active setup mode; shortlist cards show the complete supplied outfit image.
 - **Thoughtful briefs:** a private Partner Brief with relationship, the complete shortlist and image revisions for planning and a recipient Gift Brief using actual generated images, with print/PDF, image downloads and explicit reviewed Resend delivery.
 - **Privacy in the workflow:** photo provenance, controlled preview sharing, revocable invitations and approval checks tied to current image revisions.
 - **A welcoming studio:** numbered steps, live colour-coded stats and four appearances, with soft glass surfaces and gentle hover feedback that respects reduced motion. Email verification and password recovery are built in.
