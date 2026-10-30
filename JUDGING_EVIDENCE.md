@@ -1,5 +1,25 @@
 # GiftSquire judging evidence plan
 
+## Final film — 29 October 2026
+
+User-approved 2:42, 1080p walkthrough is packaged with burned-in English captions, clean video and SRT. It preserves the approved real hosted workflow, actual YouCam outputs, actual Live replies and saved/shared briefs. Hashes match the technically verified sources. Final local media is ready; public upload and submission remain separate.
+
+## Full rehearsal export — 29 October 2026
+
+The local captioned review cut is complete: 2:42, 1080p, actual hosted footage and actual Live replies, with 69 subtitles aligned to the final audio. Full decode passed; opening, manual-entry, conversation, brief and closing frames were inspected. Full-cut user approval remains next. This is a rehearsal artifact, not a published submission. Media and edit resources remain gitignored.
+
+## Full walkthrough capture — 29 October 2026
+
+User approved the audio rehearsal and authorized full capture. Actual hosted footage now covers visible User Mode typing, separate recipient invitation/upload, two fresh YouCam outfits and one lipstick close-up, recipient approvals, private giver choice, Chat review/save, Partner Brief, saved briefs and reviewed Gift Brief accepted by Resend. Both actual Live sessions transcribed actor input and completed reviewed handoffs; the outfit discussion saved its scoped preference. A later QA photo replacement demonstrated approval invalidation. The hero footage precedes that deliberate reset. Actual assistant excerpts replace the scripted guide stand-in in the review soundtrack. Final film review remains separate from feature evidence; no submission/publication performed.
+
+## Audio rehearsal — 29 October 2026
+
+First generated audio rehearsal is 2:30.7 and technically decodes, preserving original-speed narration and dialogue. It rehearses the YouCam input/output-to-approval story and separate saved/shared briefs. User listening approval and actual video capture remain next; scripted assistant audio is not a live feature demonstration. Source and production records remain in ignored Submission Video Workspace.
+
+## Walkthrough source script — 29 October 2026
+
+Prepared ignored `Submission Video Workspace/01_SOURCE_SCRIPT.md` and clean narration companion. The planned film connects actual YouCam reference/photo/results to recipient approvals, private giver choice and useful briefs, with manual setup before voice. Its claim-to-shot map separates existing acceptance from footage still to capture. Target 2:45–2:55 is editorial planning only; no media generated, recorded or submitted by this writing task. User review is next.
+
 ## Clearer mode guidance — 29 October 2026
 
 Setup guidance has a more visible speech-bubble treatment linked to the selected mode. Catalogue framing preserves the full supplied YouCam image. Optimized local build and 16 Chromium mode/theme/viewport combinations passed. These are interface refinements, not new generation capabilities; original template head crops remain source-derived.

@@ -2,6 +2,8 @@
 
 **Choose with confidence. Give with thought.**
 
+**Give them a say. Keep a little surprise.** Personalised YouCam previews connect a recipient's approved shortlist to the giver's private final choice.
+
 [Open GiftSquire](https://giftsquire-v1.vercel.app)
 
 A clothing gift should feel like *them*. GiftSquire helps thoughtful gift-givers explore real YouCam outfit previews, give the recipient a say, and keep the final choice a surprise. Shopping for yourself is a first-class journey too.
@@ -47,6 +49,6 @@ The optimized Next.js build, TypeScript checks and 39 automated tests pass. Prod
 
 ## What's next
 
-Capture the walkthrough and prepare the final submission package using verified hosted results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
+The 1080p walkthrough is approved and its final video package is prepared. Publish the video and complete the hackathon submission using verified hosted results. Broader merchant catalogs and purchasing integrations can follow the focused first release.
 
 Clothing and optional lipstick previews powered by **YouCam · Perfect Corp.**

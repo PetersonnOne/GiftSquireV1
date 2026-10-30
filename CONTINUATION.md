@@ -1,5 +1,13 @@
 # GiftSquire continuation
 
+## Final video package ready — 29 October 2026
+
+The user approved full rehearsal 01 and requested the final cut. It is finalized unchanged in ignored `Submission Video Workspace/final/GiftSquire-Final-Video-Package/`: primary `GiftSquire-Official-Demo-1080p.mp4`, clean MP4, English SRT and README. ZIP is alongside the folder. Final verification confirms 162.03 seconds, 1080p H.264/AAC, byte-identical copies of approved sources and valid ZIP. No new paid generation or publishing. Next: user-directed video hosting and remaining submission package/entry; do not claim these have been uploaded or submitted.
+
+## Walkthrough rehearsal — 29 October 2026
+
+User approved the 150.70-second scripted audio and authorized full rehearsals. Actual hosted capture is complete: manual gifting, invitation/recipient upload, two clothing renders and lipstick, approvals/private choice, Chat, both genuine Live handoffs, generated/saved/shared briefs and photo-version invalidation. All sources are in ignored Submission Video Workspace. `GiftSquire-Full-Rehearsal-01-Captioned.mp4` is ready: 162.03 seconds, 1920x1080, full decode passed, 69 non-overlapping caption cues. Clean video/SRT and original stems are preserved. Full-cut user review is next; no submission/publication has occurred. The deliberate final QA photo reset clears this rehearsal fixture's previews/approvals; use preserved source footage for the earlier valid choice. Source application code and CareTable data were untouched. Detailed review notes and capture-tool lessons are in ignored Submission Video Workspace/04_FULL_REHEARSAL_REVIEW.md and retrospective-catalog/2026-10-29-full-rehearsal.md.
+
 ## Latest appearance update — 28 October 2026
 
 CSS-only glass/hover polish is implemented in src/app/glass.css, imported after the existing global styles. The optimized build, TypeScript and seven browser appearance checks passed. All four themes, desktop/touch layouts, reduced motion and forced-colour fallback were checked. No feature, provider, account or voice logic changed. This update deploys normally through GitHub main; inspect the latest private deployment metadata and glass hosted-smoke evidence before reporting the release. No demo generation or recording started.

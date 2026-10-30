@@ -1,5 +1,25 @@
 # GiftSquire verification
 
+## Approved final video package — 29 October 2026
+
+User approved the full rehearsal and requested the final cut. The final captioned MP4 and clean MP4 are byte-identical to their decode-verified approved sources. Final metadata confirms 162.03 seconds, 1920x1080, H.264 video and AAC audio. English SRT and package ZIP included; ZIP integrity passed. No new rendering, provider calls, upload or submission. Local evidence: ignored Submission Video Workspace/final/FINAL_VERIFICATION.json. This supersedes pending full-cut user approval below.
+
+## Rehearsal export accepted technically — 29 October 2026
+
+Clean and captioned full rehearsals export at 162.03 seconds and 1920x1080; full decoding passed. Captions align to the actual final soundtrack: 411 words, 69 cues, no overlaps, maximum two lines. Audio is copied into the captioned version; no music or rate changes. The closing hold was corrected after the first duration check found an early ending. Source/edited frames were visually inspected; full-cut user watch approval remains next. Detailed evidence and review notes are in ignored Submission Video Workspace/work/review-01 and 04_FULL_REHEARSAL_REVIEW.md. No public upload/submission performed.
+
+## Full hosted rehearsal capture — 29 October 2026
+
+Captured real User Mode setup/typing, recipient invitation and photo upload, two fresh clothing outputs plus a lipstick close-up, two recipient approvals, private giver choice, Chat review/save, saved/generated briefs and explicit Gift Brief send acceptance. Both real Live modes welcomed, transcribed the generated male actor's microphone input, prepared reviews and confirmed; the discussion UI displayed the saved outfit-specific softer-colour note. Later replacing the QA photo cleared approvals/previews as expected. Original captures, provider audio/transcripts, durable events and edit sources are ignored under Submission Video Workspace. Capture harness checkbox/label and recorder teardown issues were recorded in the ignored retrospective; application code was unchanged. The script-only audio has user approval; the actual-voice review soundtrack is 162.03 seconds, decoded without speed changes. Film/caption validation is tracked beside the export.
+
+## Audio rehearsal generated — 29 October 2026
+
+Authorized audio-only rehearsal exported in ignored Submission Video Workspace: 150.70 seconds, all 15 original stems retained, final decode passed, no time stretching or background music. Sarah/Will/Alice generated through the established OpenRouter ElevenLabs route. Human listening approval is pending. Illustrative assistant speech is scripted, not fresh Live acceptance. No video recording, provider image generation or email was performed. Detailed provenance, timeline and hashes are preserved beside the export.
+
+## Walkthrough writing — 29 October 2026
+
+Source script and clean narration saved in the ignored submission video workspace. Reviewed against the script doctrine, positioning, previous-winner research and hosted feature evidence. Planned footage includes actual YouCam outputs, distinct giver/recipient roles and genuine voice responses. The version-reset sentence requires an actual reset insert or omission. Runtime remains unmeasured until audio/rehearsal; no recording, generation or new application validation performed for this document task.
+
 ## Mode guidance and catalogue framing — 29 October 2026
 
 Stronger mode-bubble border, larger text, filled icon and active-button pointer implemented for User Mode and Interactive Mode. Catalogue images use contain instead of cover to preserve the complete supplied reference. Direct inspection of the original Beige Summer Set source confirms its upper head is already cropped; this change does not invent missing facial content. Optimized production build/TypeScript passed. Chromium passed 16 combinations of mode, theme and desktop/mobile viewport: 2px bubble border, pointer beneath the active button, contain framing and no horizontal overflow. Mode and catalogue screenshots were visually inspected. Private evidence: `.private/correction-acceptance.json`; screenshots: `output/playwright/correction-*`. No voice or paid generation calls were made.
