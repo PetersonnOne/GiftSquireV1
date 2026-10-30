@@ -43,7 +43,7 @@ The live app, real production YouCam results, recipient approval, actual-image b
 | Coherent product design | Numbered journey, new brand, readable comparison, accessible themes and dashboard | Proposed design direction |
 | A memorable demo | Actual product footage, YouCam causality, confirmed result and under-three-minute captioned film | Pipeline requirements documented; no new media generated |
 
-Current official-source research is in Research/YouCam_Previous_Winners_and_Idea_Strategy_2026-10-27.md. Public copy should foreground actual achievements when implemented and use What's next for proposed extensions. No measured return reduction, perfect physical fit or clinical benefit is claimed.
+Official-source competitive research is retained locally and Git-ignored. Public copy should foreground actual achievements when implemented and use What's next for proposed extensions. No measured return reduction, perfect physical fit or clinical benefit is claimed.
 
 
 ## 27 October 2026: YouCam credential test and environment cleanup
